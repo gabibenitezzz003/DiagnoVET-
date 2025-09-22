@@ -1,0 +1,39 @@
+# Dockerfile para producción de DiagnoVET
+FROM node:18-alpine AS base
+
+# Instalar dependencias necesarias para producción
+RUN apk add --no-cache libc6-compat
+
+# Establecer directorio de trabajo
+WORKDIR /app
+
+# Copiar archivos de dependencias
+COPY package*.json ./
+
+# Instalar dependencias de producción
+RUN npm ci --only=production && npm cache clean --force
+
+# Copiar código fuente
+COPY . .
+
+# Construir aplicación para producción
+RUN npm run build
+
+# Crear usuario no-root para seguridad
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Cambiar permisos de archivos
+RUN chown -R nextjs:nodejs /app
+USER nextjs
+
+# Exponer puerto
+EXPOSE 3000
+
+# Variables de entorno para producción
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+# Comando de inicio
+CMD ["npm", "start"]

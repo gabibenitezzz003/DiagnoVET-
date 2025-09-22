@@ -1,0 +1,545 @@
+[
+  {
+    "id": "bc79e7f5-7c1f-4007-9990-056d94b4f604",
+    "fecha_creacion": "2025-09-21T19:40:07.065068",
+    "fecha_actualizacion": "2025-09-21T19:40:07.065068",
+    "tipo_estudio": "consulta_general",
+    "paciente": {
+      "nombre": "Mascota de Prueba",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años",
+      "peso": "25 kg"
+    },
+    "tutor": {
+      "nombre": "Dueño de Prueba",
+      "telefono": "123-456-7890",
+      "email": "dueño@ejemplo.com"
+    },
+    "veterinario": {
+      "nombre": "Dr. Veterinario",
+      "especialidad": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "observaciones": "Mascota en buen estado general",
+      "recomendaciones": "Continuar con cuidados regulares"
+    },
+    "imagenes": [],
+    "archivo_original": "Informe radiológico Chester.pdf",
+    "contenido_extraido": "Contenido extraído del archivo Informe radiológico Chester.pdf",
+    "confianza_extraccion": 0.85,
+    "estado": "procesando",
+    "url_google_drive": "https://drive.google.com/file/d/14M_N1lFIfaAlQQ4a5r3v2pZPID8oBfq_/view?usp=drivesdk",
+    "id_google_drive": "14M_N1lFIfaAlQQ4a5r3v2pZPID8oBfq_"
+  },
+  {
+    "id": "de6e9db8-3031-4993-8186-c8fa0d352f47",
+    "fecha_creacion": "2025-09-21T19:40:45.883472",
+    "fecha_actualizacion": "2025-09-21T19:40:45.883472",
+    "tipo_estudio": "consulta_general",
+    "paciente": {
+      "nombre": "Mascota de Prueba",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años",
+      "peso": "25 kg"
+    },
+    "tutor": {
+      "nombre": "Dueño de Prueba",
+      "telefono": "123-456-7890",
+      "email": "dueño@ejemplo.com"
+    },
+    "veterinario": {
+      "nombre": "Dr. Veterinario",
+      "especialidad": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "observaciones": "Mascota en buen estado general",
+      "recomendaciones": "Continuar con cuidados regulares"
+    },
+    "imagenes": [],
+    "archivo_original": "Informe radiológico Chester.pdf",
+    "contenido_extraido": "Contenido extraído del archivo Informe radiológico Chester.pdf",
+    "confianza_extraccion": 0.85,
+    "estado": "procesando",
+    "url_google_drive": null,
+    "id_google_drive": null
+  },
+  {
+    "id": "72a7c299-e67b-4e15-99f6-33a01e5feaee",
+    "fecha_creacion": "2025-09-21T19:42:55.101314",
+    "fecha_actualizacion": "2025-09-21T19:42:55.101314",
+    "tipo_estudio": "consulta_general",
+    "paciente": {
+      "nombre": "Mascota de Prueba",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años",
+      "peso": "25 kg"
+    },
+    "tutor": {
+      "nombre": "Dueño de Prueba",
+      "telefono": "123-456-7890",
+      "email": "dueño@ejemplo.com"
+    },
+    "veterinario": {
+      "nombre": "Dr. Veterinario",
+      "especialidad": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "observaciones": "Mascota en buen estado general",
+      "recomendaciones": "Continuar con cuidados regulares"
+    },
+    "imagenes": [],
+    "archivo_original": "real_test.pdf",
+    "contenido_extraido": "Contenido extraído del archivo real_test.pdf",
+    "confianza_extraccion": 0.85,
+    "estado": "procesando",
+    "url_google_drive": "https://drive.google.com/file/d/1UK7YCzDhRnPDQmL6EpnPogpqpufgNO3i/view?usp=drivesdk",
+    "id_google_drive": "1UK7YCzDhRnPDQmL6EpnPogpqpufgNO3i"
+  },
+  {
+    "id": "b38d0976-4746-4d79-9059-b5ea7970d505",
+    "fecha_creacion": "2025-09-21T19:51:14.910336",
+    "fecha_actualizacion": "2025-09-21T19:51:14.910336",
+    "tipo_estudio": "consulta_general",
+    "paciente": {
+      "nombre": "Mascota de Prueba",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años",
+      "peso": "25 kg"
+    },
+    "tutor": {
+      "nombre": "Dueño de Prueba",
+      "telefono": "123-456-7890",
+      "email": "dueño@ejemplo.com"
+    },
+    "veterinario": {
+      "nombre": "Dr. Veterinario",
+      "especialidad": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "observaciones": "Mascota en buen estado general",
+      "recomendaciones": "Continuar con cuidados regulares"
+    },
+    "imagenes": [],
+    "archivo_original": "real_test.pdf",
+    "contenido_extraido": "Contenido extraído del archivo real_test.pdf",
+    "confianza_extraccion": 0.85,
+    "estado": "procesando",
+    "url_google_drive": "https://drive.google.com/file/d/1i0zO1Cc2sTWXKAbYMkjPoM7A8ZrMUSlS/view?usp=drivesdk",
+    "id_google_drive": "1i0zO1Cc2sTWXKAbYMkjPoM7A8ZrMUSlS"
+  },
+  {
+    "id": "f46224f1-5b41-4916-b835-3194c935ccfe",
+    "fecha_creacion": "2025-09-21T19:53:41.697995",
+    "fecha_actualizacion": "2025-09-21T19:53:41.697995",
+    "tipo_estudio": "consulta_general",
+    "paciente": {
+      "nombre": "Mascota de Prueba",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años",
+      "peso": "25 kg"
+    },
+    "tutor": {
+      "nombre": "Dueño de Prueba",
+      "telefono": "123-456-7890",
+      "email": "dueño@ejemplo.com"
+    },
+    "veterinario": {
+      "nombre": "Dr. Veterinario",
+      "especialidad": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "observaciones": "Mascota en buen estado general",
+      "recomendaciones": "Continuar con cuidados regulares"
+    },
+    "imagenes": [],
+    "archivo_original": "Informe Ecografico de ojo de  Kiara.pdf",
+    "contenido_extraido": "Contenido extraído del archivo Informe Ecografico de ojo de  Kiara.pdf",
+    "confianza_extraccion": 0.85,
+    "estado": "procesando",
+    "url_google_drive": "https://drive.google.com/file/d/1-WoIPlzPqnuARLYPiHoptSgkksNrfA2v/view?usp=drivesdk",
+    "id_google_drive": "1-WoIPlzPqnuARLYPiHoptSgkksNrfA2v"
+  },
+  {
+    "id": "558731ec-a453-436a-a1a4-0d7f32c6fdb4",
+    "fecha_creacion": "2025-09-21T19:55:02.216855",
+    "fecha_actualizacion": "2025-09-21T19:55:02.216855",
+    "tipo_estudio": "consulta_general",
+    "paciente": {
+      "nombre": "Mascota de Prueba",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años",
+      "peso": "25 kg"
+    },
+    "tutor": {
+      "nombre": "Dueño de Prueba",
+      "telefono": "123-456-7890",
+      "email": "dueño@ejemplo.com"
+    },
+    "veterinario": {
+      "nombre": "Dr. Veterinario",
+      "especialidad": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "observaciones": "Mascota en buen estado general",
+      "recomendaciones": "Continuar con cuidados regulares"
+    },
+    "imagenes": [],
+    "archivo_original": "Informe Ecográfico Lola.pdf",
+    "contenido_extraido": "Contenido extraído del archivo Informe Ecográfico Lola.pdf",
+    "confianza_extraccion": 0.85,
+    "estado": "procesando",
+    "url_google_drive": "https://drive.google.com/file/d/1qWC7pfZV90RNIA8MWIwauQ0gAb2nH0gR/view?usp=drivesdk",
+    "id_google_drive": "1qWC7pfZV90RNIA8MWIwauQ0gAb2nH0gR"
+  },
+  {
+    "id": "4925f393-455e-4ef2-91f1-5b23189b0e11",
+    "fecha_creacion": "2025-09-21T20:01:29.327653",
+    "fecha_actualizacion": "2025-09-21T20:01:29.327653",
+    "tipo_estudio": "consulta_general",
+    "paciente": {
+      "nombre": "Mascota de Prueba",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años",
+      "peso": "25 kg"
+    },
+    "tutor": {
+      "nombre": "Dueño de Prueba",
+      "telefono": "123-456-7890",
+      "email": "dueño@ejemplo.com"
+    },
+    "veterinario": {
+      "nombre": "Dr. Veterinario",
+      "especialidad": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "observaciones": "Mascota en buen estado general",
+      "recomendaciones": [
+        "Continuar con cuidados regulares"
+      ]
+    },
+    "imagenes": [],
+    "archivo_original": "real_test.pdf",
+    "contenido_extraido": "Contenido extraído del archivo real_test.pdf",
+    "confianza_extraccion": 0.85,
+    "estado": "procesando",
+    "url_google_drive": "https://drive.google.com/file/d/10gctOM8wu8FZw2IPGrqZ-va429g2vspy/view?usp=drivesdk",
+    "id_google_drive": "10gctOM8wu8FZw2IPGrqZ-va429g2vspy"
+  },
+  {
+    "id": "a437fff8-c991-4bfb-9d74-cfde08b9e900",
+    "fecha_creacion": "2025-09-21T20:02:19.103027",
+    "fecha_actualizacion": "2025-09-21T20:02:19.103027",
+    "tipo_estudio": "consulta_general",
+    "paciente": {
+      "nombre": "Mascota de Prueba",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años",
+      "peso": "25 kg"
+    },
+    "tutor": {
+      "nombre": "Dueño de Prueba",
+      "telefono": "123-456-7890",
+      "email": "dueño@ejemplo.com"
+    },
+    "veterinario": {
+      "nombre": "Dr. Veterinario",
+      "especialidad": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "observaciones": "Mascota en buen estado general",
+      "recomendaciones": [
+        "Continuar con cuidados regulares"
+      ]
+    },
+    "imagenes": [],
+    "archivo_original": "Informe radiológico Chester.pdf",
+    "contenido_extraido": "Contenido extraído del archivo Informe radiológico Chester.pdf",
+    "confianza_extraccion": 0.85,
+    "estado": "procesando",
+    "url_google_drive": "https://drive.google.com/file/d/1Ywpy1FTzpUcIctXNnP6P1tqmP8LTycmA/view?usp=drivesdk",
+    "id_google_drive": "1Ywpy1FTzpUcIctXNnP6P1tqmP8LTycmA"
+  },
+  {
+    "id": "332d12b3-b3f9-46be-8de0-8faf6f341b9e",
+    "fecha_creacion": "2025-09-21T20:08:29.970647",
+    "fecha_actualizacion": "2025-09-21T20:08:29.970647",
+    "tipo_estudio": "consulta_general",
+    "paciente": {
+      "nombre": "Mascota de Prueba",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años",
+      "peso": "25 kg"
+    },
+    "tutor": {
+      "nombre": "Dueño de Prueba",
+      "telefono": "123-456-7890",
+      "email": "dueño@ejemplo.com"
+    },
+    "veterinario": {
+      "nombre": "Dr. Veterinario",
+      "especialidad": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "observaciones": "Mascota en buen estado general",
+      "recomendaciones": [
+        "Continuar con cuidados regulares"
+      ]
+    },
+    "imagenes": [],
+    "archivo_original": "real_test.pdf",
+    "contenido_extraido": "Contenido extraído del archivo real_test.pdf",
+    "confianza_extraccion": 0.85,
+    "estado": "procesando",
+    "url_google_drive": "https://drive.google.com/file/d/1vFpOmA-Cbif-V0iISum-0qJjsvpcQDhv/view?usp=drivesdk",
+    "id_google_drive": "1vFpOmA-Cbif-V0iISum-0qJjsvpcQDhv"
+  },
+  {
+    "id": "c34b4a76-59eb-49ee-8cdb-8a6bfbc6a120",
+    "fecha_creacion": "2025-09-21T20:09:28.359213",
+    "fecha_actualizacion": "2025-09-21T20:09:28.359213",
+    "tipo_estudio": "consulta_general",
+    "paciente": {
+      "nombre": "Mascota de Prueba",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años",
+      "peso": "25 kg"
+    },
+    "tutor": {
+      "nombre": "Dueño de Prueba",
+      "telefono": "123-456-7890",
+      "email": "dueño@ejemplo.com"
+    },
+    "veterinario": {
+      "nombre": "Dr. Veterinario",
+      "especialidad": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "observaciones": "Mascota en buen estado general",
+      "recomendaciones": [
+        "Continuar con cuidados regulares"
+      ]
+    },
+    "imagenes": [],
+    "archivo_original": "reporte_veterinario_real.pdf",
+    "contenido_extraido": "Contenido extraído del archivo reporte_veterinario_real.pdf",
+    "confianza_extraccion": 0.85,
+    "estado": "procesando",
+    "url_google_drive": "https://drive.google.com/file/d/1o1IOZo4KOAz56N9Z_PoyEjwYVM30d54w/view?usp=drivesdk",
+    "id_google_drive": "1o1IOZo4KOAz56N9Z_PoyEjwYVM30d54w"
+  },
+  {
+    "id": "e074e190-cc9e-4959-9d5a-b40ac0b0e981",
+    "fecha_creacion": "2025-09-21T20:15:47.731332",
+    "fecha_actualizacion": "2025-09-21T20:15:47.731332",
+    "tipo_estudio": "consulta_general",
+    "paciente": {
+      "nombre": "Mascota de Prueba",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años",
+      "peso": "25 kg"
+    },
+    "tutor": {
+      "nombre": "Dueño de Prueba",
+      "telefono": "123-456-7890",
+      "email": "dueño@ejemplo.com"
+    },
+    "veterinario": {
+      "nombre": "Dr. Veterinario",
+      "especialidad": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "observaciones": "Mascota en buen estado general",
+      "recomendaciones": [
+        "Continuar con cuidados regulares"
+      ]
+    },
+    "imagenes": [],
+    "archivo_original": "reporte_veterinario_real.pdf",
+    "contenido_extraido": "Contenido extraído del archivo reporte_veterinario_real.pdf",
+    "confianza_extraccion": 0.85,
+    "estado": "procesando",
+    "url_google_drive": null,
+    "id_google_drive": null
+  },
+  {
+    "id": "9d4936a0-e550-42a4-b190-be0cb45c777d",
+    "fecha_creacion": "2025-09-21T20:16:37.893114",
+    "fecha_actualizacion": "2025-09-21T20:16:37.893114",
+    "tipo_estudio": "consulta_general",
+    "paciente": {
+      "nombre": "Mascota de Prueba",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años",
+      "peso": "25 kg"
+    },
+    "tutor": {
+      "nombre": "Dueño de Prueba",
+      "telefono": "123-456-7890",
+      "email": "dueño@ejemplo.com"
+    },
+    "veterinario": {
+      "nombre": "Dr. Veterinario",
+      "especialidad": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "observaciones": "Mascota en buen estado general",
+      "recomendaciones": [
+        "Continuar con cuidados regulares"
+      ]
+    },
+    "imagenes": [],
+    "archivo_original": "reporte_veterinario_real.pdf",
+    "contenido_extraido": "Contenido extraído del archivo reporte_veterinario_real.pdf",
+    "confianza_extraccion": 0.85,
+    "estado": "procesando",
+    "url_google_drive": null,
+    "id_google_drive": null
+  },
+  {
+    "id": "7f212a23-ef14-47dd-81b6-c8c40c01c15b",
+    "fecha_creacion": "2025-09-21T20:19:58.255782",
+    "fecha_actualizacion": "2025-09-21T20:19:58.255782",
+    "tipo_estudio": "consulta_general",
+    "paciente": {
+      "nombre": "Mascota de Prueba",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años",
+      "peso": "25 kg"
+    },
+    "tutor": {
+      "nombre": "Dueño de Prueba",
+      "telefono": "123-456-7890",
+      "email": "dueño@ejemplo.com"
+    },
+    "veterinario": {
+      "nombre": "Dr. Veterinario",
+      "especialidad": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "observaciones": "Mascota en buen estado general",
+      "recomendaciones": [
+        "Continuar con cuidados regulares"
+      ]
+    },
+    "imagenes": [],
+    "archivo_original": "reporte_veterinario_real.pdf",
+    "contenido_extraido": "Contenido extraído del archivo reporte_veterinario_real.pdf",
+    "confianza_extraccion": 0.85,
+    "estado": "procesando",
+    "url_google_drive": "https://drive.google.com/file/d/1l9rC-y-ARibriYMw7c0_JJwfST3KVR5D/view?usp=drivesdk",
+    "id_google_drive": "1l9rC-y-ARibriYMw7c0_JJwfST3KVR5D"
+  },
+  {
+    "id": "0b7f98ba-7c86-4863-81cc-3cb51f22a655",
+    "fecha_creacion": "2025-09-21T20:22:35.660622",
+    "fecha_actualizacion": "2025-09-21T20:22:35.660622",
+    "tipo_estudio": "consulta_general",
+    "paciente": {
+      "nombre": "Mascota de Prueba",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años",
+      "peso": "25 kg"
+    },
+    "tutor": {
+      "nombre": "Dueño de Prueba",
+      "telefono": "123-456-7890",
+      "email": "dueño@ejemplo.com"
+    },
+    "veterinario": {
+      "nombre": "Dr. Veterinario",
+      "especialidad": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "observaciones": "Mascota en buen estado general",
+      "recomendaciones": [
+        "Continuar con cuidados regulares"
+      ]
+    },
+    "imagenes": [],
+    "archivo_original": "reporte_veterinario_real.pdf",
+    "contenido_extraido": "Contenido extraído del archivo reporte_veterinario_real.pdf",
+    "confianza_extraccion": 0.85,
+    "estado": "procesando",
+    "url_google_drive": "https://drive.google.com/file/d/1PP3Tue2dIEINmHnJRWUu-ca4iIuEHCei/view?usp=drivesdk",
+    "id_google_drive": "1PP3Tue2dIEINmHnJRWUu-ca4iIuEHCei"
+  },
+  {
+    "id": "b7b1f847-e7fe-4753-a8c1-b15c1eeee7a2",
+    "fecha_creacion": "2025-09-21T20:23:07.725556",
+    "fecha_actualizacion": "2025-09-21T20:23:07.725556",
+    "tipo_estudio": "consulta_general",
+    "paciente": {
+      "nombre": "Mascota de Prueba",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años",
+      "peso": "25 kg"
+    },
+    "tutor": {
+      "nombre": "Dueño de Prueba",
+      "telefono": "123-456-7890",
+      "email": "dueño@ejemplo.com"
+    },
+    "veterinario": {
+      "nombre": "Dr. Veterinario",
+      "especialidad": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "observaciones": "Mascota en buen estado general",
+      "recomendaciones": [
+        "Continuar con cuidados regulares"
+      ]
+    },
+    "imagenes": [],
+    "archivo_original": "reporte_veterinario_real.pdf",
+    "contenido_extraido": "Contenido extraído del archivo reporte_veterinario_real.pdf",
+    "confianza_extraccion": 0.85,
+    "estado": "procesando",
+    "url_google_drive": "https://drive.google.com/file/d/1TEa2_Z7fjrsm2JehDM4lUNeUqalUNmZD/view?usp=drivesdk",
+    "id_google_drive": "1TEa2_Z7fjrsm2JehDM4lUNeUqalUNmZD"
+  }
+]

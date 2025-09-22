@@ -1,0 +1,823 @@
+{
+  "name": "chatbot_diagnovet_final",
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "diagnovet-plus-archivos",
+          "mode": "list",
+          "cachedResultName": "diagnovet-plus-archivos"
+        },
+        "options": {}
+      },
+      "id": "232d08f2-5b2f-4fe2-a81f-b0d9572d5d61",
+      "name": "Pinecone Vector Store (Insert)",
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "position": [
+        352,
+        -384
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "pineconeApi": {
+          "id": "YqWNfmqm4H6LF6Ay",
+          "name": "PineconeApi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "text-embedding-004"
+      },
+      "id": "c9c3a322-fb56-4485-bf5f-b94e5b2b7a76",
+      "name": "Embeddings Google Gemini (Insert)",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "position": [
+        208,
+        -160
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "pMbUV8TiEFIWKXRI",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "binaryMode": "specificField",
+        "options": {}
+      },
+      "id": "b08b52b7-7be2-4d96-b5f1-0b780daf59da",
+      "name": "Default Data Loader",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "position": [
+        320,
+        -208
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "id": "76d91842-84d6-4397-bfba-4620676a4c8e",
+      "name": "Recursive Character Text Splitter",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "position": [
+        320,
+        -64
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=**CASO CLÍNICO A EVALUAR:**\n\nHistorial de conversación previa:\n{{ $json.chatHistory }}\n\n**CONSULTA ACTUAL:**\n{{ $('When chat message received').item.json.chatInput }}\n\n---\n\n**INSTRUCCIONES DE PROCESAMIENTO:**\n\n1. 🔍 **BÚSQUEDA OBLIGATORIA:** Usa `company_documents_tool` para buscar:\n   - Casos similares en el historial\n   - Protocolos de diagnóstico aplicables  \n   - Guías de tratamiento relevantes\n   - Referencias científicas disponibles\n   - Valores normales de laboratorio/imagen\n\n2. 📋 **ANÁLISIS SISTEMÁTICO:**\n   - Si hay imágenes: Describe lo que observas detalladamente\n   - Si hay valores de laboratorio: Compara con rangos normales\n   - Si es un caso clínico: Desarrolla diagnósticos diferenciales\n   - Si es consulta general: Proporciona información completa\n\n3. 🎯 **ESTRUCTURA TU RESPUESTA:**\n   \n   **🔍 ANÁLISIS DE DOCUMENTACIÓN**\n   - Qué información encontraste\n   - Relevancia para el caso actual\n   \n   **📊 EVALUACIÓN PROFESIONAL**\n   - Interpretación clínica\n   - Diagnósticos posibles/diferenciales\n   - Factores importantes a considerar\n   \n   **💡 RECOMENDACIONES ESPECIALIZADAS**  \n   - Plan diagnóstico sugerido\n   - Opciones terapéuticas basadas en protocolos\n   - Seguimiento recomendado\n   - Cuándo derivar o consultar presencialmente\n   \n   **📚 FUENTES CONSULTADAS**\n   - Documentos específicos utilizados\n   - Protocolos aplicados\n   - Referencias relevantes\n\n4. ⚠️ **CONSIDERACIONES ÉTICAS:**\n   - Indica claramente que son recomendaciones basadas en documentación\n   - Menciona cuando se requiere evaluación presencial\n   - Respeta los límites de la telemedicina veterinaria\n\n**PROCEDE CON EL ANÁLISIS:**",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Eres **Dr. VetAI**, un asistente veterinario especializado con amplia experiencia en medicina veterinaria. Tu función principal es proporcionar análisis, diagnósticos y recomendaciones basándote en:\n\n1. **Documentos clínicos** de la clínica/hospital veterinario\n2. **Imágenes médicas** (radiografías, ecografías, análisis, etc.)\n3. **Historial clínico** de pacientes\n4. **Protocolos y guías** de tratamiento\n5. **Literatura científica** veterinaria disponible\n\n### RESPONSABILIDADES PRINCIPALES:\n\n**📋 ANÁLISIS CLÍNICO:**\n- Interpretar resultados de laboratorio y estudios diagnósticos\n- Analizar imágenes radiológicas, ecográficas y microscópicas\n- Correlacionar síntomas con posibles diagnósticos diferenciales\n- Evaluar evolución de tratamientos\n\n**🎯 DIAGNÓSTICO ASISTIDO:**\n- Proporcionar diagnósticos diferenciales basados en evidencia\n- Sugerir estudios complementarios necesarios\n- Identificar patrones clínicos en la documentación\n- Alertar sobre posibles complicaciones\n\n**💊 RECOMENDACIONES TERAPÉUTICAS:**\n- Sugerir protocolos de tratamiento según especie y condición\n- Recomendar dosificaciones farmacológicas apropiadas\n- Proponer planes de seguimiento y monitoreo\n- Indicar medidas preventivas\n\n**📚 EDUCACIÓN Y CONSULTA:**\n- Explicar procedimientos médicos al equipo\n- Proporcionar información actualizada sobre patologías\n- Sugerir mejores prácticas clínicas\n- Compartir conocimiento especializado\n\n### METODOLOGÍA DE TRABAJO:\n\n1. **SIEMPRE** usa la herramienta `company_documents_tool` para buscar información relevante\n2. **ANALIZA** toda la documentación disponible antes de responder\n3. **CORRELACIONA** la información encontrada con el caso específico\n4. **PROPORCIONA** respuestas basadas en evidencia científica\n5. **INCLUYE** referencias a los documentos consultados\n\n### FORMATO DE RESPUESTA:\n\n**🔍 ANÁLISIS INICIAL:**\n- Resumen de la consulta/caso\n- Información clave extraída de documentos\n\n**📊 EVALUACIÓN CLÍNICA:**\n- Interpretación de datos disponibles\n- Diagnósticos diferenciales\n- Factores de riesgo identificados\n\n**💡 RECOMENDACIONES:**\n- Plan diagnóstico sugerido\n- Opciones terapéuticas\n- Seguimiento propuesto\n- Medidas preventivas\n\n**📖 REFERENCIAS:**\n- Documentos consultados\n- Protocolos aplicables\n- Literatura relevante encontrada\n\n### LIMITACIONES Y ÉTICA:\n\n⚠️ **IMPORTANTE:**\n- NO reemplazas el juicio clínico del veterinario\n- Tus recomendaciones son **sugerencias basadas en documentación**\n- SIEMPRE recomienda consulta presencial para casos urgentes\n- Menciona cuando se necesita evaluación directa del paciente\n- Respeta los protocolos establecidos en la documentación\n\n### ESPECIALIDADES CUBIERTAS:\n- Medicina Interna\n- Cirugía\n- Dermatología\n- Cardiología\n- Neurología\n- Oncología\n- Medicina de Emergencia\n- Medicina Preventiva\n- Diagnóstico por Imagen\n- Patología Clínica\n\n**Recuerda:** Tu valor está en analizar, correlacionar y presentar la información de manera clara y profesional, siempre respaldada por la documentación disponible en el sistema.\ntambién debes responder consultas varias, como libros, películas, series, medicina clínica, política, entre otras"
+        }
+      },
+      "id": "2606feb8-060c-44ed-922e-1051f63581a9",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        544,
+        432
+      ],
+      "typeVersion": 1.7
+    },
+    {
+      "parameters": {
+        "name": "company_documents_tool",
+        "description": "Busca información en los documentos de la empresa. Usa esta herramienta para encontrar información relevante antes de responder cualquier pregunta."
+      },
+      "id": "38647f9e-c4e8-4d0e-b80a-5c70c7d42281",
+      "name": "Vector Store Tool",
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "position": [
+        560,
+        640
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "diagnovet-plus-archivos",
+          "mode": "list",
+          "cachedResultName": "diagnovet-plus-archivos"
+        },
+        "options": {}
+      },
+      "id": "b0076f31-4320-4b27-bba3-10a69c2f00f2",
+      "name": "Pinecone Vector Store (Retrieval)",
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "position": [
+        480,
+        816
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "pineconeApi": {
+          "id": "YqWNfmqm4H6LF6Ay",
+          "name": "PineconeApi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "text-embedding-004"
+      },
+      "id": "8bd8b816-5a45-4625-8431-b46f0d2e02c9",
+      "name": "Embeddings Google Gemini (Retrieval)",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "position": [
+        480,
+        976
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "pMbUV8TiEFIWKXRI",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.id }}"
+        },
+        "options": {
+          "googleFileConversion": {},
+          "fileName": "={{ $json.name }}"
+        }
+      },
+      "id": "7c66a935-dfaf-4e95-9747-f13abbbe687f",
+      "name": "Download File From Google Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        176,
+        -384
+      ],
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "hLBUxbThDrfGGo0j",
+          "name": "Google Drive account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 5,
+              "unit": "minutes"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1NxLCCGCXbd3H2kNjwfyMirhGDIoanlFJ",
+          "mode": "id"
+        },
+        "event": "fileUpdated",
+        "options": {
+          "fileType": "all"
+        }
+      },
+      "id": "3c9901a4-d178-4bdb-a6ab-28f88ad8ab04",
+      "name": "Google Drive File Updated",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "position": [
+        -80,
+        -288
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "hLBUxbThDrfGGo0j",
+          "name": "Google Drive account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 5,
+              "unit": "minutes"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1NxLCCGCXbd3H2kNjwfyMirhGDIoanlFJ",
+          "mode": "id"
+        },
+        "event": "fileCreated",
+        "options": {
+          "fileType": "all"
+        }
+      },
+      "id": "b1450356-1758-4c26-b001-9278ebf4786c",
+      "name": "Google Drive File Created",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "position": [
+        -64,
+        -480
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "hLBUxbThDrfGGo0j",
+          "name": "Google Drive account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "maxOutputTokens": 2048,
+          "temperature": 0.1
+        }
+      },
+      "id": "7ac2ab18-30c4-45be-a9e3-a112c686ca5c",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        432,
+        672
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "pMbUV8TiEFIWKXRI",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "gemini-2.0-flash-exp",
+        "options": {
+          "temperature": 0.1
+        }
+      },
+      "id": "1d5902f2-1dd1-469b-bc41-5ec492e40812",
+      "name": "Google Gemini Chat Model (Retrieval)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        832,
+        784
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "pMbUV8TiEFIWKXRI",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "public": true,
+        "mode": "webhook",
+        "options": {
+          "allowedOrigins": "*",
+          "responseMode": "responseNode"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -192,
+        432
+      ],
+      "id": "00e4c70e-0812-4d94-81b0-639d98ed1ca1",
+      "name": "When chat message received",
+      "webhookId": "455bdd92-93c5-4d1e-942d-f1bee10003d8"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepara el historial y la pregunta actual para el AI Agent\nconst historyItems = $('Read Chat History').all();\nconst newMessage = $('When chat message received').item.json.chatInput;\nconst sessionId = $('When chat message received').item.json.sessionId || 'default';\n\n// Si no hay historial, devolver solo el mensaje actual\nif (!historyItems || historyItems.length === 0) {\n  return {\n    json: {\n      chatHistory: '',\n      currentMessage: newMessage,\n      sessionId: sessionId\n    }\n  };\n}\n\n// Procesar historial existente\nlet formattedHistory = '';\nlet validHistoryCount = 0;\n\nfor (const item of historyItems) {\n  try {\n    const data = item.json;\n    \n    // Filtrar por sessionId si está disponible\n    if (data.sessionId && sessionId && data.sessionId !== sessionId) {\n      continue;\n    }\n    \n    // Verificar que tenemos los campos necesarios\n    if (data.role && data.message) {\n      formattedHistory += `${data.role}: ${data.message}\\n`;\n      validHistoryCount++;\n    }\n  } catch (error) {\n    console.log('Error procesando item del historial:', error);\n  }\n}\n\n// Limitar el historial a las últimas 10 interacciones para evitar tokens excesivos\nif (validHistoryCount > 10) {\n  const historyLines = formattedHistory.split('\\n');\n  formattedHistory = historyLines.slice(-20).join('\\n'); // Últimos 10 pares user/assistant\n}\n\nreturn {\n  json: {\n    chatHistory: formattedHistory.trim(),\n    currentMessage: newMessage,\n    sessionId: sessionId\n  }\n};"
+      },
+      "id": "cd135e8a-05e9-4d63-985d-cddb2483447f",
+      "name": "Format History & Prompt",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        288,
+        432
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1OJUssKD9f5salldLreEHQxbYMxJpF8ZJaZ2u_fXdF4k",
+          "mode": "list",
+          "cachedResultName": "Chat History",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OJUssKD9f5salldLreEHQxbYMxJpF8ZJaZ2u_fXdF4k/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OJUssKD9f5salldLreEHQxbYMxJpF8ZJaZ2u_fXdF4k/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "sessionId"
+          ],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sessionId",
+              "displayName": "sessionId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "role",
+              "displayName": "role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "95b3bfe2-bdb2-4d44-86c9-865720188725",
+      "name": "Save User Message",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        1024,
+        432
+      ],
+      "typeVersion": 4.1,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kh2Z25L2fepnquvf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1OJUssKD9f5salldLreEHQxbYMxJpF8ZJaZ2u_fXdF4k",
+          "mode": "list",
+          "cachedResultName": "Chat History",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OJUssKD9f5salldLreEHQxbYMxJpF8ZJaZ2u_fXdF4k/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OJUssKD9f5salldLreEHQxbYMxJpF8ZJaZ2u_fXdF4k/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "message"
+          ],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sessionId",
+              "displayName": "sessionId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role",
+              "displayName": "role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "70c5aed8-a516-4d61-955f-bd4695e1ccbc",
+      "name": "Save AI Response",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        1024,
+        624
+      ],
+      "typeVersion": 4.1,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kh2Z25L2fepnquvf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1QXPiKwibd9Dl0bb1YIxO7tMyR6mc0aPTjBRFX5y7ZR8",
+          "mode": "list",
+          "cachedResultName": "history_chat",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QXPiKwibd9Dl0bb1YIxO7tMyR6mc0aPTjBRFX5y7ZR8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QXPiKwibd9Dl0bb1YIxO7tMyR6mc0aPTjBRFX5y7ZR8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "sessionId",
+              "displayName": "sessionId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "action",
+              "displayName": "action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "chatInput",
+              "displayName": "chatInput",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "fb3e5c51-71ab-4372-9740-ce477fe3b735",
+      "name": "Read Chat History",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        64,
+        432
+      ],
+      "typeVersion": 4.1,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kh2Z25L2fepnquvf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": {
+          "status": "success",
+          "response": "={{ $('AI Agent').item.json.output }}",
+          "timestamp": "={{ $now.toISOString() }}",
+          "sessionId": "={{ $('When chat message received').item.json.sessionId || 'default' }}"
+        },
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "id": "1bfa84fe-907a-44f3-b655-6c236bb736e1",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1008,
+        288
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 608,
+        "width": 960
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -144,
+        -496
+      ],
+      "typeVersion": 1,
+      "id": "192398fb-3cdb-440a-bf0d-a04c381c2f50",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 1040,
+        "width": 2006,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -432,
+        128
+      ],
+      "typeVersion": 1,
+      "id": "76f985d2-6efe-4975-a581-1c90272cb873",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Save User Message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Save AI Response",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vector Store Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Pinecone Vector Store (Insert)",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini (Insert)": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store (Insert)",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive File Created": {
+      "main": [
+        [
+          {
+            "node": "Download File From Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive File Updated": {
+      "main": [
+        [
+          {
+            "node": "Download File From Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store (Retrieval)": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Vector Store Tool",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini (Retrieval)": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store (Retrieval)",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model (Retrieval)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Vector Store Tool",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Read Chat History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format History & Prompt": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Chat History": {
+      "main": [
+        [
+          {
+            "node": "Format History & Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download File From Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Pinecone Vector Store (Insert)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "deb8251b-3fcd-4f46-8eba-3b84ecd852b4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e4520f3831cd7f9e042c30491ad3d4b92627529ee1de8c6fe9d4eceb94434889"
+  },
+  "id": "8OrDReolihlanlb9",
+  "tags": []
+}

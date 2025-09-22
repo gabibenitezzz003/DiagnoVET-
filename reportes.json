@@ -1,0 +1,118 @@
+[
+  {
+    "id": "test-report-123",
+    "fecha_creacion": "2025-09-21T19:23:35.900538",
+    "fecha_actualizacion": "2025-09-21T19:23:35.900541",
+    "tipo_estudio": "test_conexion",
+    "paciente": {
+      "id": 1,
+      "nombre": "Mascota de Prueba",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años"
+    },
+    "tutor": {
+      "id": 1,
+      "nombre": "Dueño de Prueba",
+      "telefono": "555-0123",
+      "email": "dueño@prueba.com"
+    },
+    "veterinario": {
+      "id": 1,
+      "nombre": "Dr. Prueba",
+      "apellido": "Veterinario",
+      "especializacion": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "secundarios": [],
+      "recomendaciones": [
+        "Continuar con cuidados regulares"
+      ]
+    },
+    "imagenes": [],
+    "archivo_original": "test_report.pdf",
+    "contenido_extraido": "Contenido de prueba",
+    "confianza_extraccion": 0.95,
+    "estado": "completado",
+    "url_google_drive": "https://drive.google.com/test",
+    "id_google_drive": "test_drive_id"
+  },
+  {
+    "id": "test-direct-save-123",
+    "fecha_creacion": "2025-09-21T19:31:20.297098",
+    "fecha_actualizacion": "2025-09-21T19:31:20.297100",
+    "tipo_estudio": "test_directo",
+    "paciente": {
+      "id": 1,
+      "nombre": "Mascota Directa",
+      "especie": "canino",
+      "raza": "golden",
+      "edad": "2 años"
+    },
+    "tutor": {
+      "id": 1,
+      "nombre": "Dueño Directo",
+      "telefono": "555-9999",
+      "email": "directo@prueba.com"
+    },
+    "veterinario": {
+      "id": 1,
+      "nombre": "Dr. Directo",
+      "apellido": "Veterinario",
+      "especializacion": "medicina general",
+      "clinica": "Clínica Directa"
+    },
+    "diagnostico": {
+      "principal": "Prueba directa",
+      "secundarios": [],
+      "recomendaciones": [
+        "Seguimiento directo"
+      ]
+    },
+    "imagenes": [],
+    "archivo_original": "test_directo.pdf",
+    "contenido_extraido": "Contenido de prueba directa",
+    "confianza_extraccion": 0.98,
+    "estado": "completado",
+    "url_google_drive": "https://drive.google.com/test_directo",
+    "id_google_drive": "test_directo_drive_id"
+  },
+  {
+    "id": "test-direct-123",
+    "fecha_creacion": "2025-09-21T19:51:26.023838",
+    "fecha_actualizacion": "2025-09-21T19:51:26.023841",
+    "tipo_estudio": "Prueba Directa",
+    "paciente": {
+      "nombre": "Mascota de Prueba Directa",
+      "especie": "canino",
+      "raza": "labrador",
+      "edad": "3 años"
+    },
+    "tutor": {
+      "nombre": "Tutor de Prueba",
+      "telefono": "123456789",
+      "email": "tutor@prueba.com"
+    },
+    "veterinario": {
+      "nombre": "Dr. Prueba",
+      "especialidad": "medicina general",
+      "clinica": "Clínica de Prueba"
+    },
+    "diagnostico": {
+      "principal": "Revisión de rutina",
+      "observaciones": "Mascota en buen estado",
+      "recomendaciones": [
+        "Continuar cuidados regulares"
+      ]
+    },
+    "imagenes": [],
+    "archivo_original": "test_direct.pdf",
+    "contenido_extraido": "Contenido de prueba",
+    "confianza_extraccion": 0.95,
+    "estado": "completado",
+    "url_google_drive": "https://drive.google.com/test",
+    "id_google_drive": "test123"
+  }
+]

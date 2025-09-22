@@ -1,0 +1,61 @@
+# Archivos de desarrollo
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Dependencias
+node_modules/
+backend/
+
+# Archivos de configuración local
+*.log
+logs/
+
+# Archivos temporales
+.tmp/
+temp/
+uploads/
+
+# Archivos de IDE
+.vscode/
+.idea/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de test
+test/
+__tests__/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# Archivos de documentación
+README.md
+CHANGELOG.md
+LICENSE
+
+# Archivos de configuración de desarrollo
+docker-compose*.yml
+Dockerfile*
+nginx/
+
+# Archivos de Python
+*.py
+*.pyc
+__pycache__/
+venv/
+env/
+
+# Archivos de base de datos
+*.db
+*.sqlite
+*.sqlite3
+
+# Archivos de backup
+*.bak
+*.backup

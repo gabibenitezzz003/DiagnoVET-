@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { MessageCircle, Send, Bot, User, AlertCircle, CheckCircle, Clock } from 'lucide-react'
 import { MensajeChatbot } from '@/lib/tipos/reporte-veterinario'
-import { servicioChatbot } from '@/lib/servicios/chatbot'
+import { chatbotN8nReal } from '@/lib/servicios/chatbot-n8n-real'
 import { ListaMensajes } from './ListaMensajes'
 import { FormularioMensaje } from './FormularioMensaje'
 import { SugerenciasChatbot } from './SugerenciasChatbot'
@@ -36,7 +36,7 @@ export function SeccionChatbot({ disponible }: SeccionChatbotProps) {
 
   const cargarSugerencias = async () => {
     try {
-      const resultado = await servicioChatbot.obtenerSugerencias()
+      const resultado = await chatbotN8nReal.obtenerSugerencias()
       if (resultado.exito && resultado.datos) {
         setSugerencias(resultado.datos)
       }
@@ -53,19 +53,31 @@ export function SeccionChatbot({ disponible }: SeccionChatbotProps) {
       setMensajeActual('')
 
       // Crear mensaje de usuario
-      const mensajeUsuario = servicioChatbot.crearMensaje(contenido, 'usuario', sessionId)
+      const mensajeUsuario: MensajeChatbot = {
+        id: `msg_${Date.now()}`,
+        contenido,
+        tipo: 'usuario',
+        timestamp: new Date().toISOString(),
+        session_id: sessionId
+      }
       setMensajes(prev => [...prev, mensajeUsuario])
 
       // Enviar al chatbot
-      const resultado = await servicioChatbot.enviarMensaje(contenido, sessionId, mensajes)
+      const respuesta = await chatbotN8nReal.enviarMensaje(contenido, mensajes)
 
-      if (resultado.exito && resultado.datos) {
+      if (respuesta) {
         // Crear mensaje de respuesta
-        const mensajeRespuesta = servicioChatbot.crearMensaje(resultado.datos, 'asistente', sessionId)
+        const mensajeRespuesta: MensajeChatbot = {
+          id: `msg_${Date.now() + 1}`,
+          contenido: respuesta,
+          tipo: 'asistente',
+          timestamp: new Date().toISOString(),
+          session_id: sessionId
+        }
         setMensajes(prev => [...prev, mensajeRespuesta])
         toast.success('Respuesta recibida')
       } else {
-        throw new Error(resultado.error || 'Error al enviar mensaje')
+        throw new Error('Error al enviar mensaje')
       }
 
     } catch (error) {
@@ -73,11 +85,13 @@ export function SeccionChatbot({ disponible }: SeccionChatbotProps) {
       toast.error('Error al enviar mensaje al chatbot')
       
       // Agregar mensaje de error
-      const mensajeError = servicioChatbot.crearMensaje(
-        'Lo siento, hubo un error al procesar tu mensaje. Por favor, inténtalo de nuevo.',
-        'asistente',
-        sessionId
-      )
+      const mensajeError: MensajeChatbot = {
+        id: `msg_error_${Date.now()}`,
+        contenido: 'Lo siento, hubo un error al procesar tu mensaje. Por favor, inténtalo de nuevo.',
+        tipo: 'asistente',
+        timestamp: new Date().toISOString(),
+        session_id: sessionId
+      }
       setMensajes(prev => [...prev, mensajeError])
     } finally {
       setEnviando(false)

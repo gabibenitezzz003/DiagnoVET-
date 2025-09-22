@@ -112,7 +112,7 @@ export default function ModalTurno({ turno, modoEdicion, onClose, onSave }: Moda
         paciente: formData.paciente_nombre,
         tipo_consulta: formData.tipo_consulta,
         veterinario: formData.veterinario_id,
-        notas: formData.notas,
+        notas_internas: formData.notas,
         precio: formData.precio
       }
 

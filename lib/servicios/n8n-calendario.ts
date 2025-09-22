@@ -28,7 +28,7 @@ export class ServicioN8nCalendario {
 
   constructor() {
     this.webhookUrl = process.env.NEXT_PUBLIC_N8N_CALENDARIO_WEBHOOK_URL || ''
-    
+
     if (!this.webhookUrl) {
       console.warn('⚠️ N8N_CALENDARIO_WEBHOOK_URL no configurada')
     }
@@ -52,7 +52,8 @@ export class ServicioN8nCalendario {
     if (!this.webhookUrl) {
       return {
         exito: false,
-        error: 'Webhook URL no configurada'
+        error: 'Webhook URL no configurada',
+        mensaje: 'Webhook URL no configurada'
       }
     }
 
@@ -72,7 +73,7 @@ export class ServicioN8nCalendario {
 
     try {
       console.log('🔄 Enviando petición a n8n para crear turno:', params.toString())
-      
+
       const response = await fetch(`${this.webhookUrl}?${params}`, {
         method: 'GET'
       })
@@ -82,9 +83,9 @@ export class ServicioN8nCalendario {
       }
 
       const data = await response.json()
-      
+
       console.log('✅ Respuesta de n8n:', data)
-      
+
       return {
         exito: true,
         mensaje: 'Turno creado exitosamente en Google Calendar',
@@ -94,7 +95,8 @@ export class ServicioN8nCalendario {
       console.error('❌ Error al crear turno en n8n:', error)
       return {
         exito: false,
-        error: `Error al crear turno: ${error}`
+        error: `Error al crear turno: ${error}`,
+        mensaje: `Error al crear turno: ${error}`
       }
     }
   }
@@ -117,7 +119,8 @@ export class ServicioN8nCalendario {
     if (!this.webhookUrl) {
       return {
         exito: false,
-        error: 'Webhook URL no configurada'
+        error: 'Webhook URL no configurada',
+        mensaje: 'Webhook URL no configurada'
       }
     }
 
@@ -137,7 +140,7 @@ export class ServicioN8nCalendario {
 
     try {
       console.log('🔄 Enviando petición a n8n para modificar turno:', params.toString())
-      
+
       const response = await fetch(`${this.webhookUrl}?${params}`, {
         method: 'GET'
       })
@@ -147,9 +150,9 @@ export class ServicioN8nCalendario {
       }
 
       const data = await response.json()
-      
+
       console.log('✅ Respuesta de n8n:', data)
-      
+
       return {
         exito: true,
         mensaje: 'Turno modificado exitosamente en Google Calendar',
@@ -159,7 +162,8 @@ export class ServicioN8nCalendario {
       console.error('❌ Error al modificar turno en n8n:', error)
       return {
         exito: false,
-        error: `Error al modificar turno: ${error}`
+        error: `Error al modificar turno: ${error}`,
+        mensaje: `Error al modificar turno: ${error}`
       }
     }
   }
@@ -179,7 +183,8 @@ export class ServicioN8nCalendario {
     if (!this.webhookUrl) {
       return {
         exito: false,
-        error: 'Webhook URL no configurada'
+        error: 'Webhook URL no configurada',
+        mensaje: 'Webhook URL no configurada'
       }
     }
 
@@ -196,7 +201,7 @@ export class ServicioN8nCalendario {
 
     try {
       console.log('🔄 Enviando petición a n8n para cancelar turno:', params.toString())
-      
+
       const response = await fetch(`${this.webhookUrl}?${params}`, {
         method: 'GET'
       })
@@ -206,9 +211,9 @@ export class ServicioN8nCalendario {
       }
 
       const data = await response.json()
-      
+
       console.log('✅ Respuesta de n8n:', data)
-      
+
       return {
         exito: true,
         mensaje: 'Turno cancelado exitosamente en Google Calendar'
@@ -217,7 +222,8 @@ export class ServicioN8nCalendario {
       console.error('❌ Error al cancelar turno en n8n:', error)
       return {
         exito: false,
-        error: `Error al cancelar turno: ${error}`
+        error: `Error al cancelar turno: ${error}`,
+        mensaje: `Error al cancelar turno: ${error}`
       }
     }
   }

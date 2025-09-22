@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { 
-  ChatBubbleLeftRightIcon, 
+import {
+  ChatBubbleLeftRightIcon,
   PaperAirplaneIcon,
   UserIcon,
   CpuChipIcon,
@@ -23,9 +23,9 @@ interface ChatbotPersonalizadoProps {
   onCerrar?: () => void
 }
 
-export default function ChatbotPersonalizado({ 
-  modo = 'flotante', 
-  onCerrar 
+export default function ChatbotPersonalizado({
+  modo = 'flotante',
+  onCerrar
 }: ChatbotPersonalizadoProps) {
   const [mensajes, setMensajes] = useState<Mensaje[]>([
     {
@@ -64,10 +64,10 @@ export default function ChatbotPersonalizado({
 
     try {
       console.log('🤖 Enviando mensaje al chatbot n8n real...')
-      
+
       // Enviar mensaje al chatbot real usando tu función
-      const respuesta = await chatbotN8nReal.enviarMensaje(mensajeParaEnviar, mensajes)
-      
+      const respuesta = await chatbotN8nReal.enviarMensaje(mensajeParaEnviar)
+
       const respuestaAsistente: Mensaje = {
         id: (Date.now() + 1).toString(),
         tipo: 'asistente',
@@ -77,11 +77,11 @@ export default function ChatbotPersonalizado({
 
       setMensajes(prev => [...prev, respuestaAsistente])
       console.log('✅ Respuesta recibida del chatbot n8n')
-      
+
     } catch (error) {
       console.error('❌ Error al enviar mensaje:', error)
       toast.error('Error al enviar mensaje al chatbot')
-      
+
       // Respuesta de fallback
       const respuestaFallback: Mensaje = {
         id: (Date.now() + 1).toString(),
@@ -89,7 +89,7 @@ export default function ChatbotPersonalizado({
         contenido: 'Lo siento, hubo un error al procesar tu mensaje. Por favor, intenta de nuevo.',
         timestamp: new Date()
       }
-      
+
       setMensajes(prev => [...prev, respuestaFallback])
     } finally {
       setEnviando(false)
@@ -105,7 +105,7 @@ export default function ChatbotPersonalizado({
 
   const sugerencias = chatbotN8nReal.obtenerSugerencias()
 
-  const containerClasses = modo === 'flotante' 
+  const containerClasses = modo === 'flotante'
     ? "fixed bottom-6 right-6 w-96 h-[600px] bg-white rounded-xl shadow-2xl border border-gray-200 z-50 flex flex-col"
     : "w-full h-full bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col"
 
@@ -135,40 +135,36 @@ export default function ChatbotPersonalizado({
             key={mensaje.id}
             className={`flex ${mensaje.tipo === 'usuario' ? 'justify-end' : 'justify-start'}`}
           >
-            <div className={`flex items-start space-x-3 max-w-xs lg:max-w-md ${
-              mensaje.tipo === 'usuario' ? 'flex-row-reverse space-x-reverse' : ''
-            }`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                mensaje.tipo === 'usuario' 
-                  ? 'bg-primario-600' 
-                  : 'bg-gray-100'
+            <div className={`flex items-start space-x-3 max-w-xs lg:max-w-md ${mensaje.tipo === 'usuario' ? 'flex-row-reverse space-x-reverse' : ''
               }`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${mensaje.tipo === 'usuario'
+                  ? 'bg-primario-600'
+                  : 'bg-gray-100'
+                }`}>
                 {mensaje.tipo === 'usuario' ? (
                   <UserIcon className="w-5 h-5 text-white" />
                 ) : (
                   <CpuChipIcon className="w-5 h-5 text-gray-600" />
                 )}
               </div>
-              
-              <div className={`px-4 py-2 rounded-lg ${
-                mensaje.tipo === 'usuario'
+
+              <div className={`px-4 py-2 rounded-lg ${mensaje.tipo === 'usuario'
                   ? 'bg-primario-600 text-white'
                   : 'bg-gray-100 text-gray-900'
-              }`}>
-                <p className="text-sm whitespace-pre-wrap">{mensaje.contenido}</p>
-                <p className={`text-xs mt-1 ${
-                  mensaje.tipo === 'usuario' ? 'text-primario-100' : 'text-gray-500'
                 }`}>
-                  {mensaje.timestamp.toLocaleTimeString('es-ES', { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
+                <p className="text-sm whitespace-pre-wrap">{mensaje.contenido}</p>
+                <p className={`text-xs mt-1 ${mensaje.tipo === 'usuario' ? 'text-primario-100' : 'text-gray-500'
+                  }`}>
+                  {mensaje.timestamp.toLocaleTimeString('es-ES', {
+                    hour: '2-digit',
+                    minute: '2-digit'
                   })}
                 </p>
               </div>
             </div>
           </div>
         ))}
-        
+
         {enviando && (
           <div className="flex justify-start">
             <div className="flex items-start space-x-3">
@@ -185,7 +181,7 @@ export default function ChatbotPersonalizado({
             </div>
           </div>
         )}
-        
+
         <div ref={mensajesEndRef} />
       </div>
 

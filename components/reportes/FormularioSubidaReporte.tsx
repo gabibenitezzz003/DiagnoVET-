@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Upload, FileText, X, AlertCircle, CheckCircle } from 'lucide-react'
 import { ReporteVeterinario } from '@/lib/tipos/reporte-veterinario'
-import { servicioProcesadorPDF } from '@/lib/servicios/procesador-pdf'
+import { backendAPI } from '@/lib/servicios/backend-api'
 import { servicioSupabase } from '@/lib/servicios/supabase'
 import toast from 'react-hot-toast'
 
@@ -24,7 +24,7 @@ export function FormularioSubidaReporte({
 
   const onDrop = useCallback((archivosAceptados: File[]) => {
     const archivoSeleccionado = archivosAceptados[0]
-    
+
     // Validar tipo de archivo
     if (!archivoSeleccionado.type.includes('pdf')) {
       setError('Solo se permiten archivos PDF')
@@ -70,8 +70,8 @@ export function FormularioSubidaReporte({
       }, 200)
 
       // Procesar PDF
-      const resultado = await servicioProcesadorPDF.procesarPDF(archivo)
-      
+      const resultado = await backendAPI.procesarPDF(archivo)
+
       clearInterval(interval)
       setProgreso(100)
 
@@ -81,7 +81,7 @@ export function FormularioSubidaReporte({
 
       // Guardar en base de datos
       const resultadoGuardado = await servicioSupabase.guardarReporte(resultado.reporte)
-      
+
       if (!resultadoGuardado.exito || !resultadoGuardado.datos) {
         throw new Error(resultadoGuardado.error || 'Error al guardar el reporte')
       }
@@ -127,15 +127,15 @@ export function FormularioSubidaReporte({
             {...getRootProps()}
             className={`
               border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors duration-200
-              ${isDragActive 
-                ? 'border-primario-500 bg-primario-50' 
+              ${isDragActive
+                ? 'border-primario-500 bg-primario-50'
                 : 'border-gray-300 hover:border-primario-400'
               }
               ${archivo ? 'border-exito-500 bg-exito-50' : ''}
             `}
           >
             <input {...getInputProps()} />
-            
+
             {archivo ? (
               <div className="space-y-4">
                 <CheckCircle className="h-12 w-12 text-exito-600 mx-auto" />
@@ -159,8 +159,8 @@ export function FormularioSubidaReporte({
                 <Upload className="h-12 w-12 text-gray-400 mx-auto" />
                 <div>
                   <p className="text-lg font-medium text-gray-900">
-                    {isDragActive 
-                      ? 'Suelta el archivo aquí' 
+                    {isDragActive
+                      ? 'Suelta el archivo aquí'
                       : 'Arrastra un archivo PDF aquí o haz clic para seleccionar'
                     }
                   </p>
@@ -188,7 +188,7 @@ export function FormularioSubidaReporte({
                 <span>{progreso}%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
+                <div
                   className="bg-primario-600 h-2 rounded-full transition-all duration-300"
                   style={{ width: `${progreso}%` }}
                 />

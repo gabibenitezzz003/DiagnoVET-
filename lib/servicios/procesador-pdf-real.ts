@@ -3,7 +3,7 @@
  */
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { ReporteVeterinario } from '../tipos/reporte-veterinario';
+import { ReporteVeterinario, OpcionesProcesamiento, RespuestaProcesamiento } from '../tipos/reporte-veterinario';
 import { extractorImagenesReal } from './extractor-imagenes-real'
 import { extractorImagenesPaginas } from './extractor-imagenes-paginas';
 import { servicioGoogleDriveOAuth2 } from './google-drive-oauth2';
@@ -33,7 +33,7 @@ export class ProcesadorPDFReal {
   async procesarPDF(archivo: File): Promise<ReporteVeterinario> {
     try {
       console.log('🔍 Iniciando procesamiento de PDF con Gemini AI...');
-      
+
       if (!this.genAI || !this.modelo) {
         throw new Error('Gemini AI no está configurado. Verifica NEXT_PUBLIC_GEMINI_API_KEY');
       }
@@ -41,7 +41,7 @@ export class ProcesadorPDFReal {
       // Extraer texto del PDF
       console.log('📄 Extrayendo texto del PDF...');
       const textoPDF = await this.extraerTextoDePDF(archivo);
-      
+
       // Extraer imágenes del PDF
       console.log('🖼️ Extrayendo imágenes del PDF...');
       let imagenes: any[] = [];
@@ -54,11 +54,11 @@ export class ProcesadorPDFReal {
         // Fallback al extractor original
         imagenes = await extractorImagenesReal.extraerImagenes(archivo);
       }
-      
+
       // Procesar con Gemini AI
       console.log('🤖 Procesando con Gemini AI...');
       const reporte = await this.procesarConGemini(textoPDF, archivo.name, imagenes);
-      
+
       // Subir PDF a Google Drive (temporalmente deshabilitado)
       console.log('📁 Subiendo PDF a Google Drive...');
       try {
@@ -68,10 +68,10 @@ export class ProcesadorPDFReal {
         console.warn('⚠️ Error al subir PDF a Google Drive:', error);
         console.log('📝 Continuando sin subir a Google Drive...');
       }
-      
+
       console.log('✅ PDF procesado exitosamente con Gemini AI');
       return reporte;
-      
+
     } catch (error) {
       console.error('❌ Error al procesar PDF:', error);
       throw new Error(`Error al procesar PDF: ${error instanceof Error ? error.message : 'Desconocido'}`);
@@ -86,14 +86,14 @@ export class ProcesadorPDFReal {
       const arrayBuffer = await archivo.arrayBuffer();
       const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
       let textoCompleto = '';
-      
+
       for (let i = 1; i <= pdf.numPages; i++) {
         const pagina = await pdf.getPage(i);
         const contenido = await pagina.getTextContent();
         const textoPagina = contenido.items.map(item => (item as any).str).join(' ');
         textoCompleto += `\n--- PÁGINA ${i} ---\n${textoPagina}\n`;
       }
-      
+
       return textoCompleto;
     } catch (error) {
       console.error('Error al extraer texto del PDF:', error);
@@ -200,16 +200,16 @@ ${texto}`;
       const resultado = await this.modelo.generateContent(prompt);
       const respuesta = await resultado.response;
       const textoRespuesta = respuesta.text();
-      
+
       // Limpiar la respuesta para extraer solo el JSON
       const jsonMatch = textoRespuesta.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
         throw new Error('No se pudo extraer JSON de la respuesta de Gemini');
       }
-      
+
       const datos = JSON.parse(jsonMatch[0]);
       return this.crearReporteEstructurado(datos, nombreArchivo, imagenes, texto);
-      
+
     } catch (error) {
       console.error('Error al procesar con Gemini:', error);
       throw error;
@@ -221,21 +221,21 @@ ${texto}`;
    */
   private crearReporteEstructurado(datos: any, nombreArchivo: string, imagenes: any[], texto: string): ReporteVeterinario {
     const ahora = new Date();
-    
+
     return {
       id: `reporte_${Date.now()}`,
       fechaCreacion: ahora,
       archivoOriginal: nombreArchivo,
       estado: 'completado',
       confianzaExtraccion: 0.95, // Alta confianza con prompt especializado
-      
+
       informacionEstudio: {
         fecha: datos.informacionEstudio?.fecha || new Date().toLocaleDateString('es-AR'),
         tipo: datos.informacionEstudio?.tipo || 'consulta',
         solicitud: datos.informacionEstudio?.solicitud || '',
         veterinarioDerivante: datos.informacionEstudio?.veterinarioDerivante || ''
       },
-      
+
       paciente: {
         nombre: datos.paciente?.nombre || '',
         especie: datos.paciente?.especie || '',
@@ -245,45 +245,45 @@ ${texto}`;
         peso: datos.paciente?.peso,
         identificacion: datos.paciente?.identificacion
       },
-      
+
       tutor: {
         nombre: datos.tutor?.nombre || '',
         telefono: datos.tutor?.telefono,
         email: datos.tutor?.email,
         direccion: datos.tutor?.direccion
       },
-      
+
       veterinarios: datos.veterinarios?.map((vet: any) => ({
         nombre: vet.nombre || '',
         matricula: vet.matricula || '',
         clinica: vet.clinica || ''
       })) || [],
-      
+
       hallazgos: {
         resumen: datos.hallazgos?.resumen,
         principales: datos.hallazgos?.principales || []
       },
-      
+
       conclusion: {
         principales: datos.conclusion?.principales || [],
         diferenciales: datos.conclusion?.diferenciales || [],
         notasAdicionales: datos.conclusion?.notasAdicionales || ''
       },
-      
+
       tratamiento: {
         recomendaciones: datos.tratamiento?.recomendaciones || []
       },
-      
+
       // Información adicional del PDF
-      contenidoCompleto: {
-        textoOriginal: texto, // Texto completo extraído del PDF
-        informe: datos.contenidoAdicional?.informe || '',
-        observaciones: datos.contenidoAdicional?.observaciones || [],
-        recomendaciones: datos.contenidoAdicional?.recomendaciones || [],
-        medicamentos: datos.contenidoAdicional?.medicamentos || [],
-        procedimientos: datos.contenidoAdicional?.procedimientos || []
-      },
-      
+      // contenidoCompleto: {
+      //   textoOriginal: texto, // Texto completo extraído del PDF
+      //   informe: datos.contenidoAdicional?.informe || '',
+      //   observaciones: datos.contenidoAdicional?.observaciones || [],
+      //   recomendaciones: datos.contenidoAdicional?.recomendaciones || [],
+      // medicamentos: datos.contenidoAdicional?.medicamentos || [],
+      // procedimientos: datos.contenidoAdicional?.procedimientos || []
+      // },
+
       imagenes: imagenes,
       contenidoExtraido: 'Contenido extraído del PDF con Gemini AI'
     };
@@ -309,7 +309,7 @@ ${texto}`;
         console.log('✅ PDF subido exitosamente a Google Drive');
         console.log('📁 ID del archivo:', respuesta.archivo.id);
         console.log('🔗 URL del archivo:', respuesta.archivo.url);
-        
+
         // Aquí podrías guardar la URL del archivo en la base de datos
         // para que el chatbot pueda acceder a él
         console.log('💾 Archivo disponible para el chatbot:', respuesta.archivo.url);
@@ -332,14 +332,14 @@ ${texto}`;
       console.log('🔄 Iniciando procesamiento de PDF...');
       console.log('📄 Archivo:', archivo.name);
       console.log('⚙️ Opciones:', opciones);
-      
+
       let reporte: ReporteVeterinario;
       let archivoDrive: any = null;
-      
+
       // Extraer texto del PDF
       console.log('📄 Extrayendo texto del PDF...');
       const textoPDF = await this.extraerTextoDePDF(archivo);
-      
+
       // Extraer imágenes del PDF si está habilitado
       let imagenes: any[] = [];
       if (opciones.extraerImagenes) {
@@ -354,7 +354,7 @@ ${texto}`;
           imagenes = await extractorImagenesReal.extraerImagenes(archivo);
         }
       }
-      
+
       // Procesar con Gemini AI si está habilitado
       if (opciones.usarIA) {
         console.log('🤖 Procesando con Gemini AI...');
@@ -363,7 +363,7 @@ ${texto}`;
         console.log('📝 Creando reporte básico sin IA...');
         reporte = this.crearReporteBasico(archivo, textoPDF, imagenes);
       }
-      
+
       // Subir PDF ORIGINAL a Google Drive si está habilitado
       if (opciones.analizarYSubir) {
         console.log('📁 Subiendo PDF ORIGINAL a Google Drive...');
@@ -381,14 +381,14 @@ ${texto}`;
           console.log('📝 Continuando sin subir a Google Drive...');
         }
       }
-      
+
       console.log('✅ PDF procesado exitosamente');
       return {
         exito: true,
         reporte,
         archivoDrive
       };
-      
+
     } catch (error) {
       console.error('❌ Error al procesar PDF:', error);
       return {
@@ -401,25 +401,30 @@ ${texto}`;
   /**
    * Sube el PDF ORIGINAL a Google Drive (sin procesar)
    */
-  private async subirPDFOriginalaGoogleDrive(archivo: File): Promise<{exito: boolean, archivo?: any, error?: string}> {
+  private async subirPDFOriginalaGoogleDrive(archivo: File): Promise<{ exito: boolean, archivo?: any, error?: string }> {
     try {
       console.log('📁 Subiendo PDF ORIGINAL a Google Drive...');
       console.log('📄 Archivo:', archivo.name);
       console.log('📏 Tamaño:', (archivo.size / 1024 / 1024).toFixed(2), 'MB');
-      
+
       // Convertir archivo a buffer
       const arrayBuffer = await archivo.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
-      
+
       // Subir usando el servicio de Google Drive
-      const respuesta = await servicioGoogleDriveOAuth2.subirPDF(archivo.name, buffer, 'application/pdf');
-      
+      const respuesta = await servicioGoogleDriveOAuth2.subirPDF(archivo, {
+        paciente_nombre: 'N/A',
+        veterinario_nombre: 'N/A',
+        tipo_estudio: 'N/A',
+        fecha_estudio: new Date().toISOString()
+      });
+
       if (respuesta.exito && respuesta.archivo) {
         console.log('✅ PDF ORIGINAL subido exitosamente a Google Drive');
         console.log('📁 ID del archivo:', respuesta.archivo.id);
         console.log('🔗 URL del archivo:', respuesta.archivo.url);
         console.log('📂 Carpeta:', respuesta.archivo.carpeta_id);
-        
+
         return {
           exito: true,
           archivo: {
@@ -439,7 +444,7 @@ ${texto}`;
           error: respuesta.error || 'Error desconocido al subir PDF ORIGINAL'
         };
       }
-      
+
     } catch (error) {
       console.error('❌ Error al subir PDF ORIGINAL a Google Drive:', error);
       return {
@@ -455,18 +460,18 @@ ${texto}`;
   private crearReporteBasico(archivo: File, textoPDF: string, imagenes: any[]): ReporteVeterinario {
     return {
       id: Date.now().toString(),
-      nombreArchivo: archivo.name,
-      fechaProcesamiento: new Date().toISOString(),
+      archivoOriginal: archivo.name,
+      fechaCreacion: new Date(),
       estado: 'completado',
       confianzaExtraccion: 0.5,
-      
+
       informacionEstudio: {
         fecha: new Date().toISOString().split('T')[0],
         tipo: 'otro',
         solicitud: 'Análisis básico de documento',
         veterinarioDerivante: 'No especificado'
       },
-      
+
       paciente: {
         nombre: 'No especificado',
         especie: 'No especificado',
@@ -474,34 +479,32 @@ ${texto}`;
         edad: 'No especificado',
         sexo: 'desconocido'
       },
-      
+
       tutor: {
         nombre: 'No especificado'
       },
-      
+
       veterinarios: [{
         nombre: 'No especificado',
         matricula: 'No especificado',
         clinica: 'No especificado'
       }],
-      
+
       hallazgos: {
         principales: ['Análisis básico realizado'],
-        secundarios: [],
-        observaciones: 'Documento procesado sin análisis de IA'
+        resumen: 'Documento procesado sin análisis de IA'
       },
-      
+
       conclusion: {
-        diagnostico: 'Análisis básico completado',
-        recomendaciones: ['Revisar documento manualmente']
+        principales: ['Análisis básico completado'],
+        diferenciales: [],
+        notasAdicionales: 'Revisar documento manualmente'
       },
-      
+
       tratamiento: {
-        medicamentos: [],
-        procedimientos: [],
-        seguimiento: 'Revisar con veterinario'
+        recomendaciones: ['Revisar con veterinario']
       },
-      
+
       imagenes,
       contenidoExtraido: textoPDF
     };

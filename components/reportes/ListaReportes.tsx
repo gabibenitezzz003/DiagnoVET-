@@ -96,7 +96,7 @@ export function ListaReportes({
               {/* Header del Reporte */}
               <div className="flex items-center space-x-3 mb-3">
                 <span className="text-2xl">
-                  {obtenerTipoEstudioIcono(reporte.tipoEstudio)}
+                  {obtenerTipoEstudioIcono(reporte.informacionEstudio?.tipo || 'otro')}
                 </span>
                 <div>
                   <h4 className="text-lg font-semibold text-gray-900 truncate">
@@ -112,7 +112,7 @@ export function ListaReportes({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div className="flex items-center space-x-2 text-sm text-gray-600">
                   <User className="h-4 w-4" />
-                  <span>Dr. {reporte.veterinario.nombre}</span>
+                  <span>Dr. {reporte.veterinarios?.[0]?.nombre || 'N/A'}</span>
                 </div>
                 <div className="flex items-center space-x-2 text-sm text-gray-600">
                   <Calendar className="h-4 w-4" />
@@ -128,7 +128,7 @@ export function ListaReportes({
                   Diagnóstico Principal:
                 </p>
                 <p className="text-sm text-gray-600 line-clamp-2">
-                  {reporte.diagnostico.principal}
+                  {reporte.conclusion?.principales?.[0] || 'N/A'}
                 </p>
               </div>
 
@@ -194,8 +194,8 @@ export function ListaReportes({
                     className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center"
                   >
                     <span className="text-xs text-gray-500">
-                      {imagen.tipo === 'radiografia' ? '📷' : 
-                       imagen.tipo === 'ecografia' ? '🔍' : '🖼️'}
+                      {imagen.tipo === 'radiografia' ? '📷' :
+                        imagen.tipo === 'ecografia' ? '🔍' : '🖼️'}
                     </span>
                   </div>
                 ))}
@@ -231,7 +231,7 @@ export function ListaReportes({
                 </div>
               </div>
               <p className="text-gray-700 mb-6">
-                ¿Estás seguro de que quieres eliminar este reporte? 
+                ¿Estás seguro de que quieres eliminar este reporte?
                 Se perderán todos los datos asociados.
               </p>
               <div className="flex space-x-3">

@@ -36,10 +36,8 @@ export function SeccionChatbot({ disponible }: SeccionChatbotProps) {
 
   const cargarSugerencias = async () => {
     try {
-      const resultado = await chatbotN8nReal.obtenerSugerencias()
-      if (resultado.exito && resultado.datos) {
-        setSugerencias(resultado.datos)
-      }
+      const sugerencias = chatbotN8nReal.obtenerSugerencias()
+      setSugerencias(sugerencias)
     } catch (error) {
       console.error('Error al cargar sugerencias:', error)
     }
@@ -63,7 +61,7 @@ export function SeccionChatbot({ disponible }: SeccionChatbotProps) {
       setMensajes(prev => [...prev, mensajeUsuario])
 
       // Enviar al chatbot
-      const respuesta = await chatbotN8nReal.enviarMensaje(contenido, mensajes)
+      const respuesta = await chatbotN8nReal.enviarMensaje(contenido)
 
       if (respuesta) {
         // Crear mensaje de respuesta
@@ -83,7 +81,7 @@ export function SeccionChatbot({ disponible }: SeccionChatbotProps) {
     } catch (error) {
       console.error('Error al enviar mensaje:', error)
       toast.error('Error al enviar mensaje al chatbot')
-      
+
       // Agregar mensaje de error
       const mensajeError: MensajeChatbot = {
         id: `msg_error_${Date.now()}`,
@@ -168,7 +166,7 @@ export function SeccionChatbot({ disponible }: SeccionChatbotProps) {
               ¡Hola! Soy Dr. VetAI
             </h4>
             <p className="text-gray-600 mb-4">
-              Tu asistente especializado en medicina veterinaria. 
+              Tu asistente especializado en medicina veterinaria.
               ¿En qué puedo ayudarte hoy?
             </p>
             {sugerencias.length > 0 && (

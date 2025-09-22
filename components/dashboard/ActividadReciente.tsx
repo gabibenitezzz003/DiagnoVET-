@@ -42,10 +42,10 @@ export function ActividadReciente() {
         id: reporte.id,
         tipo: reporte.estado === 'completado' ? 'completado' : 
               reporte.estado === 'error' ? 'error' : 'reporte',
-        titulo: `Reporte ${reporte.tipoEstudio}`,
-        descripcion: `Paciente: ${reporte.paciente?.nombre || 'Sin nombre'} - ${reporte.veterinario?.nombre || 'Veterinario no asignado'}`,
+        titulo: `Reporte ${reporte.informacionEstudio?.tipo || 'otro'}`,
+        descripcion: `Paciente: ${reporte.paciente?.nombre || 'Sin nombre'} - ${reporte.veterinarios?.[0]?.nombre || 'Veterinario no asignado'}`,
         timestamp: new Date(reporte.fechaCreacion),
-        usuario: reporte.veterinario?.nombre,
+        usuario: reporte.veterinarios?.[0]?.nombre,
         estado: reporte.estado
       }))
       

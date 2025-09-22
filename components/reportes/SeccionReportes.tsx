@@ -29,6 +29,8 @@ export function SeccionReportes({
   const [reporteSeleccionado, setReporteSeleccionado] = useState<ReporteVeterinario | null>(null)
   const [terminoBusqueda, setTerminoBusqueda] = useState('')
   const [filtros, setFiltros] = useState({
+    fechaInicio: '',
+    fechaFin: '',
     tipoEstudio: '',
     especie: '',
     veterinario: '',

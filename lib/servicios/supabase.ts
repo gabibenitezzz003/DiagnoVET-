@@ -5,7 +5,7 @@
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { CONFIGURACION_SUPABASE } from '../constantes/configuracion';
-import { ReporteVeterinario, FiltrosReporte, RespuestaAPI, Paginacion } from '../tipos/reporte-veterinario';
+import { ReporteVeterinario } from '../tipos/reporte-veterinario';
 import { Turno, CrearTurnoRequest, ActualizarTurnoRequest, FiltrosTurno } from '../tipos/turno';
 
 export class ServicioSupabase {
@@ -29,7 +29,7 @@ export class ServicioSupabase {
   /**
    * Obtiene un reporte por ID
    */
-  async obtenerReportePorId(id: string): Promise<RespuestaAPI<ReporteVeterinario>> {
+  async obtenerReportePorId(id: string): Promise<{ exito: boolean; datos?: ReporteVeterinario; error?: string }> {
     if (this.modoDemo) {
       return this.obtenerReporteDemoPorId(id);
     }
@@ -64,12 +64,12 @@ export class ServicioSupabase {
    * Obtiene reportes con filtros y paginación
    */
   async obtenerReportes(
-    filtros: FiltrosReporte = {},
+    filtros: any = {},
     pagina: number = 1,
     limite: number = 10
-  ): Promise<RespuestaAPI<ReporteVeterinario[]> & { paginacion: Paginacion }> {
+  ): Promise<{ exito: boolean; datos?: ReporteVeterinario[]; error?: string; paginacion?: any }> {
     if (this.modoDemo) {
-      return this.obtenerReportesDemo(filtros, pagina, limite);
+      return this.obtenerReportesDemoConFiltros(filtros, pagina, limite);
     }
 
     try {
@@ -139,7 +139,7 @@ export class ServicioSupabase {
   /**
    * Guarda un nuevo reporte
    */
-  async guardarReporte(reporte: ReporteVeterinario): Promise<RespuestaAPI<ReporteVeterinario>> {
+  async guardarReporte(reporte: ReporteVeterinario): Promise<{ exito: boolean; datos?: ReporteVeterinario; error?: string }> {
     try {
       // Verificar si el reporte ya existe para evitar duplicados
       const reporteExistente = await this.verificarReporteExistente(reporte);
@@ -148,7 +148,6 @@ export class ServicioSupabase {
         return {
           exito: true,
           datos: this.mapearReporteDesdeBD(reporteExistente),
-          mensaje: 'Reporte ya existe en la base de datos',
         };
       }
 
@@ -168,11 +167,10 @@ export class ServicioSupabase {
       }
 
       console.log(`✅ Nuevo reporte guardado: ${data.archivo_original}`);
-      return {
-        exito: true,
-        datos: this.mapearReporteDesdeBD(data),
-        mensaje: 'Reporte guardado exitosamente',
-      };
+        return {
+          exito: true,
+          datos: this.mapearReporteDesdeBD(data),
+        };
     } catch (error) {
       return {
         exito: false,
@@ -184,7 +182,7 @@ export class ServicioSupabase {
   /**
    * Actualiza un reporte existente
    */
-  async actualizarReporte(id: string, reporte: Partial<ReporteVeterinario>): Promise<RespuestaAPI<ReporteVeterinario>> {
+  async actualizarReporte(id: string, reporte: Partial<ReporteVeterinario>): Promise<{ exito: boolean; datos?: ReporteVeterinario; error?: string }> {
     try {
       const datosBD = await this.mapearReporteParaBD(reporte as ReporteVeterinario);
       datosBD.fecha_actualizacion = new Date().toISOString();
@@ -203,11 +201,10 @@ export class ServicioSupabase {
         };
       }
 
-      return {
-        exito: true,
-        datos: this.mapearReporteDesdeBD(data),
-        mensaje: 'Reporte actualizado exitosamente',
-      };
+        return {
+          exito: true,
+          datos: this.mapearReporteDesdeBD(data),
+        };
     } catch (error) {
       return {
         exito: false,
@@ -219,7 +216,7 @@ export class ServicioSupabase {
   /**
    * Elimina un reporte
    */
-  async eliminarReporte(id: string): Promise<RespuestaAPI<void>> {
+  async eliminarReporte(id: string): Promise<{ exito: boolean; error?: string }> {
     try {
       const { error } = await this.cliente
         .from(CONFIGURACION_SUPABASE.TABLA_REPORTES)
@@ -235,7 +232,6 @@ export class ServicioSupabase {
 
       return {
         exito: true,
-        mensaje: 'Reporte eliminado exitosamente',
       };
     } catch (error) {
       return {
@@ -248,7 +244,7 @@ export class ServicioSupabase {
   /**
    * Busca reportes por texto
    */
-  async buscarReportes(termino: string, limite: number = 10): Promise<RespuestaAPI<ReporteVeterinario[]>> {
+  async buscarReportes(termino: string, limite: number = 10): Promise<{ exito: boolean; datos?: ReporteVeterinario[]; error?: string }> {
     try {
       const { data, error } = await this.cliente
         .from('vista_reportes_completos')
@@ -284,10 +280,12 @@ export class ServicioSupabase {
     return {
       id: datos.id || '',
       fechaCreacion: datos.creado_en ? new Date(datos.creado_en) : new Date(),
-      fechaActualizacion: datos.actualizado_en ? new Date(datos.actualizado_en) : new Date(),
-      tipoEstudio: datos.tipo_estudio || 'otro',
+      informacionEstudio: {
+        tipo: datos.tipo_estudio || 'otro',
+        fecha: datos.fecha_estudio || new Date().toISOString().split('T')[0],
+        solicitud: datos.solicitud_estudio || ''
+      },
       paciente: {
-        id: datos.paciente_id || 0,
         nombre: datos.paciente_nombre || 'No especificado',
         especie: datos.paciente_especie || 'No especificada',
         raza: datos.paciente_raza || 'No especificada',
@@ -295,31 +293,26 @@ export class ServicioSupabase {
         sexo: datos.paciente_sexo || 'desconocido'
       },
       tutor: {
-        id: 0,
         nombre: datos.tutor_nombre || 'No especificado',
         telefono: datos.tutor_telefono || 'No especificado',
         email: datos.tutor_email || 'No especificado'
       },
-      veterinario: {
-        id: datos.veterinario_id || 0,
+      veterinarios: [{
         nombre: datos.veterinario_nombre || 'No especificado',
-        apellido: datos.veterinario_apellido || '',
-        especializacion: datos.veterinario_especializacion || 'General',
         clinica: datos.veterinario_clinica || 'No especificada',
-        email: 'No especificado',
-        matricula: datos.veterinario_matricula || 'No especificada',
-        telefono: 'No especificado',
-        direccion: 'No especificada',
-        horario: 'No especificado',
-        fotoUrl: 'No especificada',
-        activo: true,
-        creadoEn: new Date(),
-        actualizadoEn: new Date()
+        matricula: datos.veterinario_matricula || 'No especificada'
+      }],
+      hallazgos: {
+        resumen: datos.hallazgos_resumen || 'No especificado',
+        principales: datos.hallazgos_principales || ['No especificado']
       },
-      diagnostico: {
-        principal: datos.diagnostico_principal || 'No especificado',
-        secundarios: datos.diagnostico_secundarios || [],
-        recomendaciones: datos.diagnostico_recomendaciones || []
+      conclusion: {
+        principales: datos.conclusion_principales || ['No especificado'],
+        diferenciales: datos.conclusion_diferenciales || [],
+        notasAdicionales: datos.conclusion_notas || 'No especificado'
+      },
+      tratamiento: {
+        recomendaciones: datos.tratamiento_recomendaciones || ['No especificado']
       },
       imagenes: datos.imagenes || [],
       archivoOriginal: datos.archivo_original || 'No especificado',
@@ -582,7 +575,7 @@ export class ServicioSupabase {
   /**
    * Crea una paginación vacía
    */
-  private crearPaginacionVacia(): Paginacion {
+  private crearPaginacionVacia(): any {
     return {
       pagina: 1,
       limite: 10,
@@ -596,8 +589,9 @@ export class ServicioSupabase {
   /**
    * Obtiene un reporte demo por ID
    */
-  private async obtenerReporteDemoPorId(id: string): Promise<RespuestaAPI<ReporteVeterinario>> {
-    const reporte = this.obtenerReportesDemo().find(r => r.id === id);
+  private async obtenerReporteDemoPorId(id: string): Promise<{ exito: boolean; datos?: ReporteVeterinario; error?: string }> {
+    const reportes = await this.obtenerReportesDemo();
+    const reporte = reportes.find(r => r.id === id);
 
     if (!reporte) {
       return {
@@ -615,23 +609,23 @@ export class ServicioSupabase {
   /**
    * Obtiene reportes demo con filtros
    */
-  private async obtenerReportesDemo(
-    filtros: FiltrosReporte = {},
+  private async obtenerReportesDemoConFiltros(
+    filtros: any = {},
     pagina: number = 1,
     limite: number = 10
-  ): Promise<RespuestaAPI<ReporteVeterinario[]> & { paginacion: Paginacion }> {
+  ): Promise<{ exito: boolean; datos?: ReporteVeterinario[]; error?: string; paginacion?: any }> {
     let reportes = this.obtenerReportesDemo();
 
     // Aplicar filtros
     if (filtros.tipoEstudio) {
-      reportes = reportes.filter(r => r.tipoEstudio === filtros.tipoEstudio);
+      reportes = reportes.filter(r => r.informacionEstudio?.tipo === filtros.tipoEstudio);
     }
     if (filtros.especie) {
       reportes = reportes.filter(r => r.paciente.especie === filtros.especie);
     }
     if (filtros.veterinario) {
       reportes = reportes.filter(r =>
-        r.veterinario.nombre.toLowerCase().includes(filtros.veterinario!.toLowerCase())
+        r.veterinarios?.some(vet => vet.nombre.toLowerCase().includes(filtros.veterinario!.toLowerCase()))
       );
     }
     if (filtros.estado) {
@@ -664,13 +658,16 @@ export class ServicioSupabase {
       {
         id: '1',
         fechaCreacion: new Date('2024-01-15'),
-        fechaActualizacion: new Date('2024-01-15'),
-        tipoEstudio: 'radiografia',
+        informacionEstudio: {
+          tipo: 'radiografia',
+          fecha: '2024-01-15',
+          solicitud: 'Fractura de fémur'
+        },
         paciente: {
           nombre: 'Max',
           especie: 'canino',
           raza: 'Labrador',
-          edad: 3,
+          edad: '3 años',
           sexo: 'macho',
         },
         tutor: {
@@ -678,22 +675,31 @@ export class ServicioSupabase {
           telefono: '+1234567890',
           email: 'juan@email.com',
         },
-        veterinario: {
+        veterinarios: [{
           nombre: 'Dr. María García',
-          especialidad: 'Radiología',
           clinica: 'VetCenter',
+          matricula: 'VET12345'
+        }],
+        hallazgos: {
+          resumen: 'Fractura completa del fémur derecho con desplazamiento',
+          principales: ['Fractura de fémur', 'Inflamación localizada']
         },
-        diagnostico: {
-          principal: 'Fractura de fémur',
-          secundarios: ['Inflamación localizada'],
-          recomendaciones: ['Reposo absoluto', 'Medicación antiinflamatoria'],
+        conclusion: {
+          principales: ['Fractura de fémur'],
+          diferenciales: ['Inflamación localizada'],
+          notasAdicionales: 'Requiere tratamiento quirúrgico'
+        },
+        tratamiento: {
+          recomendaciones: ['Reposo absoluto', 'Medicación antiinflamatoria']
         },
         imagenes: [
           {
             id: 'img1',
+            nombre: 'radiografia-max.jpg',
             url: '/demo/radiografia-max.jpg',
             descripcion: 'Radiografía lateral del fémur',
             tipo: 'radiografia',
+            pagina: 1
           },
         ],
         archivoOriginal: 'radiografia-max.pdf',
@@ -704,13 +710,16 @@ export class ServicioSupabase {
       {
         id: '2',
         fechaCreacion: new Date('2024-01-14'),
-        fechaActualizacion: new Date('2024-01-14'),
-        tipoEstudio: 'ecografia',
+        informacionEstudio: {
+          tipo: 'ecografia',
+          fecha: '2024-01-14',
+          solicitud: 'Soplo cardíaco'
+        },
         paciente: {
           nombre: 'Luna',
           especie: 'felino',
           raza: 'Siamés',
-          edad: 2,
+          edad: '2 años',
           sexo: 'hembra',
         },
         tutor: {
@@ -718,22 +727,31 @@ export class ServicioSupabase {
           telefono: '+0987654321',
           email: 'ana@email.com',
         },
-        veterinario: {
+        veterinarios: [{
           nombre: 'Dr. Carlos Ruiz',
-          especialidad: 'Cardiología',
           clinica: 'PetCare',
+          matricula: 'VET67890'
+        }],
+        hallazgos: {
+          resumen: 'Soplo cardíaco grado II con hipertrofia ventricular',
+          principales: ['Soplo cardíaco grado II', 'Hipertrofia ventricular']
         },
-        diagnostico: {
-          principal: 'Soplo cardíaco grado II',
-          secundarios: ['Hipertrofia ventricular'],
-          recomendaciones: ['Control cardiológico cada 6 meses', 'Ejercicio moderado'],
+        conclusion: {
+          principales: ['Soplo cardíaco grado II'],
+          diferenciales: ['Hipertrofia ventricular'],
+          notasAdicionales: 'Requiere seguimiento cardiológico'
+        },
+        tratamiento: {
+          recomendaciones: ['Control cardiológico cada 6 meses', 'Ejercicio moderado']
         },
         imagenes: [
           {
             id: 'img2',
+            nombre: 'ecocardio-luna.jpg',
             url: '/demo/ecocardio-luna.jpg',
             descripcion: 'Ecocardiograma 2D',
             tipo: 'ecografia',
+            pagina: 1
           },
         ],
         archivoOriginal: 'ecocardio-luna.pdf',
@@ -751,7 +769,7 @@ export class ServicioSupabase {
   /**
    * Obtiene turnos con filtros opcionales
    */
-  async obtenerTurnos(filtros: FiltrosTurno = {}): Promise<RespuestaAPI<Turno[]>> {
+  async obtenerTurnos(filtros: any = {}): Promise<{ exito: boolean; datos?: any[]; error?: string }> {
     if (this.modoDemo) {
       return this.obtenerTurnosDemo(filtros);
     }
@@ -816,7 +834,7 @@ export class ServicioSupabase {
   /**
    * Crea un nuevo turno
    */
-  async crearTurno(turno: CrearTurnoRequest): Promise<RespuestaAPI<Turno>> {
+  async crearTurno(turno: any): Promise<{ exito: boolean; datos?: any; error?: string }> {
     if (this.modoDemo) {
       return this.crearTurnoDemo(turno);
     }
@@ -924,7 +942,7 @@ export class ServicioSupabase {
   /**
    * Actualiza un turno existente
    */
-  async actualizarTurno(id: string, turno: ActualizarTurnoRequest): Promise<RespuestaAPI<Turno>> {
+  async actualizarTurno(id: string, turno: any): Promise<{ exito: boolean; datos?: any; error?: string }> {
     if (this.modoDemo) {
       return this.actualizarTurnoDemo(id, turno);
     }
@@ -968,7 +986,7 @@ export class ServicioSupabase {
   /**
    * Elimina un turno
    */
-  async eliminarTurno(id: string): Promise<RespuestaAPI<boolean>> {
+  async eliminarTurno(id: string): Promise<{ exito: boolean; datos?: boolean; error?: string }> {
     if (this.modoDemo) {
       return this.eliminarTurnoDemo(id);
     }
@@ -1002,7 +1020,7 @@ export class ServicioSupabase {
   // MÉTODOS DEMO PARA TURNOS
   // ========================================
 
-  private async obtenerTurnosDemo(filtros: FiltrosTurno = {}): Promise<RespuestaAPI<Turno[]>> {
+  private async obtenerTurnosDemo(filtros: any = {}): Promise<{ exito: boolean; datos?: any[]; error?: string }> {
     // Simular delay de red
     await new Promise(resolve => setTimeout(resolve, 500));
 
@@ -1021,10 +1039,10 @@ export class ServicioSupabase {
         fecha_hora: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // Mañana
         duracion_minutos: 30,
         estado: 'confirmado',
-        notas: 'Primera consulta de rutina',
+        notas_internas: 'Primera consulta de rutina',
         precio: 5000,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        creado_en: new Date().toISOString(),
+        actualizado_en: new Date().toISOString()
       },
       {
         id: '2',
@@ -1040,10 +1058,10 @@ export class ServicioSupabase {
         fecha_hora: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), // Pasado mañana
         duracion_minutos: 120,
         estado: 'programado',
-        notas: 'Cirugía de esterilización',
+        notas_internas: 'Cirugía de esterilización',
         precio: 15000,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        creado_en: new Date().toISOString(),
+        actualizado_en: new Date().toISOString()
       },
       {
         id: '3',
@@ -1059,10 +1077,10 @@ export class ServicioSupabase {
         fecha_hora: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(), // En 3 días
         duracion_minutos: 45,
         estado: 'completado',
-        notas: 'Consulta por problemas de piel',
+        notas_internas: 'Consulta por problemas de piel',
         precio: 8000,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        creado_en: new Date().toISOString(),
+        actualizado_en: new Date().toISOString()
       }
     ];
 
@@ -1083,7 +1101,7 @@ export class ServicioSupabase {
     };
   }
 
-  private async crearTurnoDemo(turno: CrearTurnoRequest): Promise<RespuestaAPI<Turno>> {
+  private async crearTurnoDemo(turno: any): Promise<{ exito: boolean; datos?: any; error?: string }> {
     // Simular delay de red
     await new Promise(resolve => setTimeout(resolve, 800));
 
@@ -1102,7 +1120,7 @@ export class ServicioSupabase {
     };
   }
 
-  private async actualizarTurnoDemo(id: string, turno: ActualizarTurnoRequest): Promise<RespuestaAPI<Turno>> {
+  private async actualizarTurnoDemo(id: string, turno: any): Promise<{ exito: boolean; datos?: any; error?: string }> {
     // Simular delay de red
     await new Promise(resolve => setTimeout(resolve, 600));
 
@@ -1133,7 +1151,7 @@ export class ServicioSupabase {
     };
   }
 
-  private async eliminarTurnoDemo(id: string): Promise<RespuestaAPI<boolean>> {
+  private async eliminarTurnoDemo(id: string): Promise<{ exito: boolean; datos?: boolean; error?: string }> {
     // Simular delay de red
     await new Promise(resolve => setTimeout(resolve, 400));
 
@@ -1150,7 +1168,7 @@ export class ServicioSupabase {
   /**
    * Obtiene todos los veterinarios
    */
-  async obtenerVeterinarios(): Promise<RespuestaAPI<any[]>> {
+  async obtenerVeterinarios(): Promise<{ exito: boolean; datos?: any[]; error?: string }> {
     if (this.modoDemo) {
       return this.obtenerVeterinariosDemo();
     }
@@ -1185,7 +1203,7 @@ export class ServicioSupabase {
   // MÉTODOS DEMO PARA VETERINARIOS
   // ========================================
 
-  private async obtenerVeterinariosDemo(): Promise<RespuestaAPI<any[]>> {
+  private async obtenerVeterinariosDemo(): Promise<{ exito: boolean; datos?: any[]; error?: string }> {
     // Simular delay de red
     await new Promise(resolve => setTimeout(resolve, 300));
 
@@ -1202,8 +1220,8 @@ export class ServicioSupabase {
         direccion: 'Av. Corrientes 1234, CABA',
         horario: 'Lunes a Viernes 9:00-18:00',
         activo: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        creado_en: new Date().toISOString(),
+        actualizado_en: new Date().toISOString()
       },
       {
         id: '2',
@@ -1217,8 +1235,8 @@ export class ServicioSupabase {
         direccion: 'Av. Corrientes 1234, CABA',
         horario: 'Lunes a Viernes 9:00-18:00',
         activo: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        creado_en: new Date().toISOString(),
+        actualizado_en: new Date().toISOString()
       },
       {
         id: '3',
@@ -1232,8 +1250,8 @@ export class ServicioSupabase {
         direccion: 'Av. Corrientes 1234, CABA',
         horario: 'Lunes a Viernes 9:00-18:00',
         activo: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        creado_en: new Date().toISOString(),
+        actualizado_en: new Date().toISOString()
       },
       {
         id: '4',
@@ -1247,8 +1265,8 @@ export class ServicioSupabase {
         direccion: 'Av. Corrientes 1234, CABA',
         horario: 'Lunes a Viernes 9:00-18:00',
         activo: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        creado_en: new Date().toISOString(),
+        actualizado_en: new Date().toISOString()
       },
       {
         id: '5',
@@ -1262,8 +1280,8 @@ export class ServicioSupabase {
         direccion: 'Av. Corrientes 1234, CABA',
         horario: 'Lunes a Viernes 9:00-18:00',
         activo: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        creado_en: new Date().toISOString(),
+        actualizado_en: new Date().toISOString()
       }
     ];
 

@@ -3,12 +3,7 @@
  * Usa la función proporcionada por el usuario
  */
 
-interface MensajeChatbot {
-  id: string
-  tipo: 'usuario' | 'asistente'
-  contenido: string
-  timestamp: Date
-}
+import { MensajeChatbot } from '@/lib/tipos/reporte-veterinario'
 
 export class ChatbotN8nReal {
   private webhookUrl: string
@@ -17,7 +12,7 @@ export class ChatbotN8nReal {
   constructor() {
     this.webhookUrl = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL || ''
     this.sessionId = `session_${Date.now()}`
-    
+
     if (!this.webhookUrl) {
       console.warn('⚠️ N8N_WEBHOOK_URL no configurada')
     } else {
@@ -28,7 +23,7 @@ export class ChatbotN8nReal {
   /**
    * Envía un mensaje al chatbot usando la función proporcionada
    */
-  async enviarMensaje(mensaje: string, historial: MensajeChatbot[] = []): Promise<string> {
+  async enviarMensaje(mensaje: string): Promise<string> {
     try {
       if (!this.webhookUrl) {
         console.log('⚠️ Webhook URL no configurada, usando respuesta simulada')
@@ -39,7 +34,7 @@ export class ChatbotN8nReal {
       console.log('📝 Mensaje:', mensaje)
       console.log('🆔 Session ID:', this.sessionId)
       console.log('🔗 Webhook URL:', this.webhookUrl)
-      
+
       const response = await fetch(this.webhookUrl, {
         method: 'POST',
         headers: {
@@ -51,19 +46,19 @@ export class ChatbotN8nReal {
           sessionId: this.sessionId
         })
       })
-      
+
       console.log('📡 Status de respuesta:', response.status)
       console.log('📡 Headers de respuesta:', response.headers)
-      
+
       if (!response.ok) {
         const errorText = await response.text()
         console.error('❌ Error en respuesta:', errorText)
         throw new Error(`HTTP ${response.status}: ${response.statusText}`)
       }
-      
+
       const data = await response.json()
       console.log('✅ Respuesta recibida de n8n:', data)
-      
+
       // Manejar diferentes formatos de respuesta de n8n
       if (data.response) {
         return data.response
@@ -79,7 +74,7 @@ export class ChatbotN8nReal {
         console.warn('⚠️ Formato de respuesta no reconocido:', data)
         return 'Respuesta recibida del chatbot'
       }
-      
+
     } catch (error) {
       console.error('❌ Error al comunicarse con n8n:', error)
       console.log('🔄 Usando respuesta simulada como fallback')
@@ -92,7 +87,7 @@ export class ChatbotN8nReal {
    */
   private generarRespuestaSimulada(mensaje: string): string {
     const mensajeLower = mensaje.toLowerCase()
-    
+
     // Respuestas contextuales basadas en palabras clave
     if (mensajeLower.includes('radiografia') || mensajeLower.includes('rayos x')) {
       return `Para interpretar una radiografía correctamente, es importante evaluar:
@@ -104,7 +99,7 @@ export class ChatbotN8nReal {
 
 ¿Hay algún hallazgo específico que te preocupe en la radiografía?`
     }
-    
+
     if (mensajeLower.includes('analisis') || mensajeLower.includes('laboratorio')) {
       return `Los análisis de laboratorio requieren interpretación cuidadosa considerando:
 
@@ -120,7 +115,7 @@ export class ChatbotN8nReal {
 
 ¿Qué valores específicos necesitas interpretar?`
     }
-    
+
     if (mensajeLower.includes('cirugia') || mensajeLower.includes('quirurgico')) {
       return `Para procedimientos quirúrgicos, considera:
 
@@ -141,7 +136,7 @@ export class ChatbotN8nReal {
 
 ¿Qué tipo de cirugía estás planificando?`
     }
-    
+
     if (mensajeLower.includes('medicamento') || mensajeLower.includes('farmaco')) {
       return `Para prescripción de medicamentos, recuerda:
 
@@ -158,7 +153,7 @@ export class ChatbotN8nReal {
 
 ¿Qué medicamento necesitas prescribir?`
     }
-    
+
     if (mensajeLower.includes('emergencia') || mensajeLower.includes('urgencia')) {
       return `En situaciones de emergencia veterinaria:
 
@@ -176,7 +171,7 @@ export class ChatbotN8nReal {
 
 ¿Cuál es la situación de emergencia que estás enfrentando?`
     }
-    
+
     // Respuesta general
     return `Entiendo tu consulta. Como asistente médico veterinario, puedo ayudarte con:
 

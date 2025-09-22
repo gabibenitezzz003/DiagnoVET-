@@ -1,9 +1,9 @@
 'use client'
 
 import { ReporteVeterinario } from '@/lib/tipos/reporte-veterinario'
-import { 
-  UserIcon, 
-  HeartIcon, 
+import {
+  UserIcon,
+  HeartIcon,
   DocumentTextIcon,
   CalendarIcon,
   PhoneIcon,
@@ -164,7 +164,7 @@ export default function ReporteFormateado({ reporte, modo = 'completo' }: Report
             <div className="space-y-2">
               <div className="text-sm font-medium text-gray-500">Veterinario Firmante</div>
               <div className="text-lg font-semibold text-gray-900">
-                {reporte.veterinarios?.[0]?.nombre || 'No especificado'} {reporte.veterinarios?.[0]?.apellido || ''}
+                {reporte.veterinarios?.[0]?.nombre || 'No especificado'}
               </div>
             </div>
             <div className="space-y-2">
@@ -230,7 +230,7 @@ export default function ReporteFormateado({ reporte, modo = 'completo' }: Report
         </div>
 
         {/* Informe Médico Estructurado */}
-        {reporte.contenidoCompleto?.informe && (
+        {reporte.markdownCompleto && (
           <div className="mt-6">
             <div className="bg-white rounded-lg p-6 border border-gray-200">
               <div className="flex items-center space-x-2 mb-4">
@@ -239,7 +239,7 @@ export default function ReporteFormateado({ reporte, modo = 'completo' }: Report
               </div>
               <div className="prose max-w-none">
                 <div className="whitespace-pre-wrap text-sm text-gray-700 bg-gray-50 p-4 rounded border font-mono">
-                  {reporte.contenidoCompleto.informe}
+                  {reporte.markdownCompleto}
                 </div>
               </div>
             </div>
@@ -322,9 +322,9 @@ export default function ReporteFormateado({ reporte, modo = 'completo' }: Report
         {/* Imágenes del Estudio */}
         {reporte.imagenes && reporte.imagenes.length > 0 && (
           <div className="mt-6">
-            <VisorImagenes 
-              imagenes={reporte.imagenes} 
-              titulo="Imágenes del Estudio" 
+            <VisorImagenes
+              imagenes={reporte.imagenes}
+              titulo="Imágenes del Estudio"
             />
           </div>
         )}
@@ -346,11 +346,10 @@ export default function ReporteFormateado({ reporte, modo = 'completo' }: Report
               <div className="space-y-2">
                 <div className="text-sm font-medium text-gray-500">Estado del Procesamiento</div>
                 <div className="text-sm text-gray-900">
-                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                    reporte.estado === 'completado' 
-                      ? 'bg-green-100 text-green-800' 
+                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${reporte.estado === 'completado'
+                      ? 'bg-green-100 text-green-800'
                       : 'bg-yellow-100 text-yellow-800'
-                  }`}>
+                    }`}>
                     {reporte.estado.toUpperCase()}
                   </span>
                 </div>

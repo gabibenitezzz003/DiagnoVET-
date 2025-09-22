@@ -21,7 +21,7 @@ class RateLimiter {
         const windowStart = now - this.config.windowMs;
 
         // Limpiar entradas expiradas
-        for (const [key, value] of this.requests.entries()) {
+        for (const [key, value] of Array.from(this.requests.entries())) {
             if (value.resetTime < now) {
                 this.requests.delete(key);
             }

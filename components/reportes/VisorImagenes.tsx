@@ -130,7 +130,7 @@ export default function VisorImagenes({ imagenes, titulo = "Imágenes del Estudi
                   {imagen.descripcion}
                 </p>
                 <div className="mt-2 text-xs text-gray-400">
-                  {imagen.ancho} × {imagen.alto}px
+                  Imagen médica
                 </div>
               </div>
             </div>
@@ -232,7 +232,7 @@ export default function VisorImagenes({ imagenes, titulo = "Imágenes del Estudi
                 {imagenSeleccionada.descripcion}
               </p>
               <div className="mt-2 text-xs text-gray-300">
-                Página {imagenSeleccionada.pagina} • {imagenSeleccionada.ancho} × {imagenSeleccionada.alto}px
+                Página {imagenSeleccionada.pagina}
               </div>
             </div>
           </div>

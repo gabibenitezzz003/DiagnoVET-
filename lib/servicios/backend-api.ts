@@ -51,19 +51,34 @@ export class BackendAPIService {
             const reporte: ReporteVeterinario = {
                 id: data.datos.id,
                 fechaCreacion: data.datos.fecha_creacion ? new Date(data.datos.fecha_creacion) : new Date(),
-                fechaActualizacion: data.datos.fecha_actualizacion ? new Date(data.datos.fecha_actualizacion) : new Date(),
-                tipoEstudio: data.datos.tipo_estudio,
+                // fechaActualizacion: data.datos.fecha_actualizacion ? new Date(data.datos.fecha_actualizacion) : new Date(),
+                informacionEstudio: {
+                    tipo: data.datos.tipo_estudio || 'otro',
+                    fecha: data.datos.fecha_creacion || new Date().toISOString(),
+                    solicitud: data.datos.solicitud || ''
+                },
                 paciente: data.datos.paciente || {},
                 tutor: data.datos.tutor || {},
-                veterinario: data.datos.veterinario || {},
-                diagnostico: data.datos.diagnostico || {},
+                veterinarios: data.datos.veterinarios || [],
+                hallazgos: data.datos.hallazgos || {
+                    resumen: '',
+                    principales: []
+                },
+                conclusion: data.datos.conclusion || {
+                    principales: [],
+                    diferenciales: [],
+                    notasAdicionales: ''
+                },
+                tratamiento: data.datos.tratamiento || {
+                    recomendaciones: []
+                },
                 imagenes: data.datos.imagenes || [],
                 archivoOriginal: data.datos.archivo_original,
                 contenidoExtraido: data.datos.contenido_extraido || '',
                 confianzaExtraccion: data.datos.confianza_extraccion || 0,
                 estado: data.datos.estado || 'procesando',
-                urlGoogleDrive: data.datos.url_google_drive,
-                idGoogleDrive: data.datos.id_google_drive
+                // urlGoogleDrive: data.datos.url_google_drive,
+                // idGoogleDrive: data.datos.id_google_drive
             };
 
             return {
@@ -72,13 +87,15 @@ export class BackendAPIService {
                 archivoDrive: data.datos.google_drive ? {
                     id: data.datos.google_drive.id,
                     url: data.datos.google_drive.url,
-                    nombre: data.datos.google_drive.nombre
+                    nombre: data.datos.google_drive.nombre,
+                    carpeta_id: data.datos.google_drive.carpeta_id || ''
                 } : (data.datos.url_google_drive ? {
                     id: data.datos.id_google_drive,
                     url: data.datos.url_google_drive,
-                    nombre: data.datos.archivo_original
+                    nombre: data.datos.archivo_original,
+                    carpeta_id: ''
                 } : undefined),
-                mensaje: data.mensaje || 'PDF procesado exitosamente'
+                // mensaje: data.mensaje || 'PDF procesado exitosamente'
             };
 
         } catch (error) {
@@ -126,19 +143,34 @@ export class BackendAPIService {
             return data.datos.map((reporte: any) => ({
                 id: reporte.id,
                 fechaCreacion: new Date(reporte.fecha_creacion || reporte.creado_en),
-                fechaActualizacion: new Date(reporte.fecha_actualizacion || reporte.actualizado_en),
-                tipoEstudio: reporte.tipo_estudio,
+                // fechaActualizacion: new Date(reporte.fecha_actualizacion || reporte.actualizado_en),
+                informacionEstudio: {
+                    tipo: reporte.tipo_estudio || 'otro',
+                    fecha: reporte.fecha_creacion || new Date().toISOString(),
+                    solicitud: reporte.solicitud || ''
+                },
                 paciente: reporte.paciente,
                 tutor: reporte.tutor,
-                veterinario: reporte.veterinario,
-                diagnostico: reporte.diagnostico,
+                veterinarios: reporte.veterinarios || [],
+                hallazgos: reporte.hallazgos || {
+                    resumen: '',
+                    principales: []
+                },
+                conclusion: reporte.conclusion || {
+                    principales: [],
+                    diferenciales: [],
+                    notasAdicionales: ''
+                },
+                tratamiento: reporte.tratamiento || {
+                    recomendaciones: []
+                },
                 imagenes: reporte.imagenes || [],
                 archivoOriginal: reporte.archivo_original,
                 contenidoExtraido: reporte.contenido_extraido,
                 confianzaExtraccion: reporte.confianza_extraccion,
                 estado: reporte.estado,
-                urlGoogleDrive: reporte.url_google_drive,
-                idGoogleDrive: reporte.id_google_drive
+                // urlGoogleDrive: reporte.url_google_drive,
+                // idGoogleDrive: reporte.id_google_drive
             }));
 
         } catch (error) {
@@ -163,19 +195,34 @@ export class BackendAPIService {
             return {
                 id: reporte.id,
                 fechaCreacion: new Date(reporte.fecha_creacion || reporte.creado_en),
-                fechaActualizacion: new Date(reporte.fecha_actualizacion || reporte.actualizado_en),
-                tipoEstudio: reporte.tipo_estudio,
+                // fechaActualizacion: new Date(reporte.fecha_actualizacion || reporte.actualizado_en),
+                informacionEstudio: {
+                    tipo: reporte.tipo_estudio || 'otro',
+                    fecha: reporte.fecha_creacion || new Date().toISOString(),
+                    solicitud: reporte.solicitud || ''
+                },
                 paciente: reporte.paciente,
                 tutor: reporte.tutor,
-                veterinario: reporte.veterinario,
-                diagnostico: reporte.diagnostico,
+                veterinarios: reporte.veterinarios || [],
+                hallazgos: reporte.hallazgos || {
+                    resumen: '',
+                    principales: []
+                },
+                conclusion: reporte.conclusion || {
+                    principales: [],
+                    diferenciales: [],
+                    notasAdicionales: ''
+                },
+                tratamiento: reporte.tratamiento || {
+                    recomendaciones: []
+                },
                 imagenes: reporte.imagenes || [],
                 archivoOriginal: reporte.archivo_original,
                 contenidoExtraido: reporte.contenido_extraido,
                 confianzaExtraccion: reporte.confianza_extraccion,
                 estado: reporte.estado,
-                urlGoogleDrive: reporte.url_google_drive,
-                idGoogleDrive: reporte.id_google_drive
+                // urlGoogleDrive: reporte.url_google_drive,
+                // idGoogleDrive: reporte.id_google_drive
             };
 
         } catch (error) {
@@ -199,19 +246,34 @@ export class BackendAPIService {
             return data.datos.map((reporte: any) => ({
                 id: reporte.id,
                 fechaCreacion: new Date(reporte.fecha_creacion || reporte.creado_en),
-                fechaActualizacion: new Date(reporte.fecha_actualizacion || reporte.actualizado_en),
-                tipoEstudio: reporte.tipo_estudio,
+                // fechaActualizacion: new Date(reporte.fecha_actualizacion || reporte.actualizado_en),
+                informacionEstudio: {
+                    tipo: reporte.tipo_estudio || 'otro',
+                    fecha: reporte.fecha_creacion || new Date().toISOString(),
+                    solicitud: reporte.solicitud || ''
+                },
                 paciente: reporte.paciente,
                 tutor: reporte.tutor,
-                veterinario: reporte.veterinario,
-                diagnostico: reporte.diagnostico,
+                veterinarios: reporte.veterinarios || [],
+                hallazgos: reporte.hallazgos || {
+                    resumen: '',
+                    principales: []
+                },
+                conclusion: reporte.conclusion || {
+                    principales: [],
+                    diferenciales: [],
+                    notasAdicionales: ''
+                },
+                tratamiento: reporte.tratamiento || {
+                    recomendaciones: []
+                },
                 imagenes: reporte.imagenes || [],
                 archivoOriginal: reporte.archivo_original,
                 contenidoExtraido: reporte.contenido_extraido,
                 confianzaExtraccion: reporte.confianza_extraccion,
                 estado: reporte.estado,
-                urlGoogleDrive: reporte.url_google_drive,
-                idGoogleDrive: reporte.id_google_drive
+                // urlGoogleDrive: reporte.url_google_drive,
+                // idGoogleDrive: reporte.id_google_drive
             }));
 
         } catch (error) {

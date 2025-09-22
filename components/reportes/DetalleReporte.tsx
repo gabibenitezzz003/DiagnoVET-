@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { X, Edit, Download, Share, User, Calendar, Stethoscope, AlertCircle, CheckCircle, Clock, Image as ImageIcon, Eye, XRay, Heart, ChevronLeft, ChevronRight, FileMarkdown } from 'lucide-react'
+import { X, Edit, Download, Share, User, Calendar, Stethoscope, AlertCircle, CheckCircle, Clock, Image as ImageIcon, Eye, Heart, ChevronLeft, ChevronRight, FileText } from 'lucide-react'
 import { ReporteVeterinario } from '@/lib/tipos/reporte-veterinario'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -70,7 +70,7 @@ export function DetalleReporte({
     switch (tipo?.toLowerCase()) {
       case 'radiografia':
       case 'radiografía':
-        return <XRay className="w-5 h-5" />
+        return <ImageIcon className="w-5 h-5" />
       case 'ecocardiografia':
       case 'ecocardiografía':
         return <Heart className="w-5 h-5" />
@@ -117,14 +117,14 @@ export function DetalleReporte({
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <span className="text-3xl">
-              {obtenerTipoEstudioIcono(reporte.tipoEstudio)}
+              {obtenerTipoEstudioIcono(reporte.informacionEstudio?.tipo || 'otro')}
             </span>
             <div>
               <h3 className="text-xl font-semibold text-gray-900">
                 Reporte de {reporte.paciente.nombre}
               </h3>
               <p className="text-sm text-gray-500">
-                {reporte.tipoEstudio.charAt(0).toUpperCase() + reporte.tipoEstudio.slice(1)}
+                {(reporte.informacionEstudio?.tipo || 'otro').charAt(0).toUpperCase() + (reporte.informacionEstudio?.tipo || 'otro').slice(1)}
               </p>
             </div>
           </div>
@@ -247,18 +247,18 @@ export function DetalleReporte({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium text-gray-500">Nombre</label>
-                <p className="text-gray-900">{reporte.veterinario.nombre}</p>
+                <p className="text-gray-900">{reporte.veterinarios?.[0]?.nombre || 'N/A'}</p>
               </div>
-              {reporte.veterinario.matricula && (
+              {reporte.veterinarios?.[0]?.matricula && (
                 <div>
                   <label className="text-sm font-medium text-gray-500">Matrícula</label>
-                  <p className="text-gray-900">{reporte.veterinario.matricula}</p>
+                  <p className="text-gray-900">{reporte.veterinarios[0].matricula}</p>
                 </div>
               )}
-              {reporte.veterinario.clinica && (
+              {reporte.veterinarios?.[0]?.clinica && (
                 <div>
                   <label className="text-sm font-medium text-gray-500">Clínica</label>
-                  <p className="text-gray-900">{reporte.veterinario.clinica}</p>
+                  <p className="text-gray-900">{reporte.veterinarios[0].clinica}</p>
                 </div>
               )}
             </div>
@@ -272,32 +272,32 @@ export function DetalleReporte({
             <div className="space-y-4">
               <div>
                 <label className="text-sm font-medium text-gray-500">Diagnóstico Principal</label>
-                <p className="text-gray-900 mt-1">{reporte.diagnostico.principal}</p>
+                <p className="text-gray-900 mt-1">{reporte.conclusion?.principales?.[0] || 'N/A'}</p>
               </div>
 
-              {reporte.diagnostico.diferenciales.length > 0 && (
+              {reporte.conclusion?.diferenciales && reporte.conclusion.diferenciales.length > 0 && (
                 <div>
                   <label className="text-sm font-medium text-gray-500">Diagnósticos Diferenciales</label>
                   <ul className="list-disc list-inside text-gray-900 mt-1 space-y-1">
-                    {reporte.diagnostico.diferenciales.map((diferencial, index) => (
+                    {reporte.conclusion.diferenciales.map((diferencial, index) => (
                       <li key={index}>{diferencial}</li>
                     ))}
                   </ul>
                 </div>
               )}
 
-              {reporte.diagnostico.observaciones && (
+              {reporte.conclusion?.notasAdicionales && (
                 <div>
                   <label className="text-sm font-medium text-gray-500">Observaciones</label>
-                  <p className="text-gray-900 mt-1">{reporte.diagnostico.observaciones}</p>
+                  <p className="text-gray-900 mt-1">{reporte.conclusion.notasAdicionales}</p>
                 </div>
               )}
 
-              {reporte.diagnostico.recomendaciones.length > 0 && (
+              {reporte.tratamiento?.recomendaciones && reporte.tratamiento.recomendaciones.length > 0 && (
                 <div>
                   <label className="text-sm font-medium text-gray-500">Recomendaciones</label>
                   <ul className="list-disc list-inside text-gray-900 mt-1 space-y-1">
-                    {reporte.diagnostico.recomendaciones.map((recomendacion, index) => (
+                    {reporte.tratamiento.recomendaciones.map((recomendacion, index) => (
                       <li key={index}>{recomendacion}</li>
                     ))}
                   </ul>
@@ -363,17 +363,17 @@ export function DetalleReporte({
                         </div>
                       )}
 
-                      {imagen.ubicacion && (
+                      {imagen.pagina && (
                         <div>
-                          <h4 className="text-sm font-medium text-gray-900 mb-1">Ubicación</h4>
-                          <p className="text-sm text-gray-600">{imagen.ubicacion}</p>
+                          <h4 className="text-sm font-medium text-gray-900 mb-1">Página</h4>
+                          <p className="text-sm text-gray-600">{imagen.pagina}</p>
                         </div>
                       )}
 
-                      {imagen.hallazgos && (
+                      {imagen.descripcion && (
                         <div>
                           <h4 className="text-sm font-medium text-gray-900 mb-1">Hallazgos</h4>
-                          <p className="text-sm text-gray-600 line-clamp-3">{imagen.hallazgos}</p>
+                          <p className="text-sm text-gray-600 line-clamp-3">{imagen.descripcion}</p>
                         </div>
                       )}
                     </div>
@@ -401,7 +401,7 @@ export function DetalleReporte({
                   onClick={() => setMostrarMarkdown(!mostrarMarkdown)}
                   className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
-                  <FileMarkdown className="w-4 h-4 mr-2" />
+                  <FileText className="w-4 h-4 mr-2" />
                   {mostrarMarkdown ? 'Ver Texto' : 'Ver Markdown'}
                 </button>
               )}
@@ -431,7 +431,7 @@ export function DetalleReporte({
             <div className="flex items-center space-x-2">
               <Calendar className="h-4 w-4" />
               <span>
-                <strong>Actualizado:</strong> {format(new Date(reporte.fechaActualizacion), 'dd/MM/yyyy HH:mm', { locale: es })}
+                <strong>Creado:</strong> {format(new Date(reporte.fechaCreacion), 'dd/MM/yyyy HH:mm', { locale: es })}
               </span>
             </div>
           </div>
@@ -553,10 +553,10 @@ export function DetalleReporte({
                 <span className="font-medium">Descripción:</span> {reporte.imagenes[imagenSeleccionada]?.descripcion || 'N/A'}
               </div>
               <div>
-                <span className="font-medium">Hallazgos:</span> {reporte.imagenes[imagenSeleccionada]?.hallazgos || 'N/A'}
+                <span className="font-medium">Hallazgos:</span> {reporte.imagenes[imagenSeleccionada]?.descripcion || 'N/A'}
               </div>
               <div>
-                <span className="font-medium">Ubicación:</span> {reporte.imagenes[imagenSeleccionada]?.ubicacion || 'N/A'}
+                <span className="font-medium">Página:</span> {reporte.imagenes[imagenSeleccionada]?.pagina || 'N/A'}
               </div>
             </div>
           </div>

@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { 
-  ChatBubbleLeftRightIcon, 
+import {
+  ChatBubbleLeftRightIcon,
   XMarkIcon,
   PaperAirplaneIcon,
   UserIcon,
@@ -48,10 +48,10 @@ export default function ChatbotFlotante() {
 
     try {
       console.log('🤖 Enviando mensaje al chatbot...')
-      
+
       // Enviar mensaje al chatbot real
-      const respuesta = await chatbotN8nReal.enviarMensaje(mensajeParaEnviar, mensajes)
-      
+      const respuesta = await chatbotN8nReal.enviarMensaje(mensajeParaEnviar)
+
       const respuestaAsistente: Mensaje = {
         id: (Date.now() + 1).toString(),
         tipo: 'asistente',
@@ -61,11 +61,11 @@ export default function ChatbotFlotante() {
 
       setMensajes(prev => [...prev, respuestaAsistente])
       console.log('✅ Respuesta recibida del chatbot')
-      
+
     } catch (error) {
       console.error('❌ Error al enviar mensaje:', error)
       toast.error('Error al enviar mensaje al chatbot')
-      
+
       // Respuesta de fallback
       const respuestaFallback: Mensaje = {
         id: (Date.now() + 1).toString(),
@@ -73,7 +73,7 @@ export default function ChatbotFlotante() {
         contenido: 'Lo siento, hubo un error al procesar tu mensaje. Por favor, intenta de nuevo.',
         timestamp: new Date()
       }
-      
+
       setMensajes(prev => [...prev, respuestaFallback])
     } finally {
       setEnviando(false)
@@ -126,40 +126,36 @@ export default function ChatbotFlotante() {
                 key={mensaje.id}
                 className={`flex ${mensaje.tipo === 'usuario' ? 'justify-end' : 'justify-start'}`}
               >
-                <div className={`flex items-start space-x-3 max-w-xs lg:max-w-md ${
-                  mensaje.tipo === 'usuario' ? 'flex-row-reverse space-x-reverse' : ''
-                }`}>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    mensaje.tipo === 'usuario' 
-                      ? 'bg-primario-600' 
-                      : 'bg-gray-100'
+                <div className={`flex items-start space-x-3 max-w-xs lg:max-w-md ${mensaje.tipo === 'usuario' ? 'flex-row-reverse space-x-reverse' : ''
                   }`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${mensaje.tipo === 'usuario'
+                      ? 'bg-primario-600'
+                      : 'bg-gray-100'
+                    }`}>
                     {mensaje.tipo === 'usuario' ? (
                       <UserIcon className="w-5 h-5 text-white" />
                     ) : (
                       <CpuChipIcon className="w-5 h-5 text-gray-600" />
                     )}
                   </div>
-                  
-                  <div className={`px-4 py-2 rounded-lg ${
-                    mensaje.tipo === 'usuario'
+
+                  <div className={`px-4 py-2 rounded-lg ${mensaje.tipo === 'usuario'
                       ? 'bg-primario-600 text-white'
                       : 'bg-gray-100 text-gray-900'
-                  }`}>
-                    <p className="text-sm whitespace-pre-wrap">{mensaje.contenido}</p>
-                    <p className={`text-xs mt-1 ${
-                      mensaje.tipo === 'usuario' ? 'text-primario-100' : 'text-gray-500'
                     }`}>
-                      {mensaje.timestamp.toLocaleTimeString('es-ES', { 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
+                    <p className="text-sm whitespace-pre-wrap">{mensaje.contenido}</p>
+                    <p className={`text-xs mt-1 ${mensaje.tipo === 'usuario' ? 'text-primario-100' : 'text-gray-500'
+                      }`}>
+                      {mensaje.timestamp.toLocaleTimeString('es-ES', {
+                        hour: '2-digit',
+                        minute: '2-digit'
                       })}
                     </p>
                   </div>
                 </div>
               </div>
             ))}
-            
+
             {enviando && (
               <div className="flex justify-start">
                 <div className="flex items-start space-x-3">

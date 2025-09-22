@@ -27,7 +27,7 @@ export class ExtractorImagenesPaginas {
 
       // Procesar páginas específicas que suelen contener imágenes médicas
       const paginasConImagenes = this._identificarPaginasConImagenes(pdf.numPages);
-      
+
       for (const numeroPagina of paginasConImagenes) {
         try {
           const pagina = await pdf.getPage(numeroPagina);
@@ -37,7 +37,7 @@ export class ExtractorImagenesPaginas {
           console.warn(`⚠️ Error procesando página ${numeroPagina}:`, error);
         }
       }
-      
+
       console.log(`✅ Extracción finalizada. Se encontraron ${imagenesExtraidas.length} imágenes médicas.`);
       return imagenesExtraidas;
 
@@ -52,15 +52,15 @@ export class ExtractorImagenesPaginas {
    */
   private _identificarPaginasConImagenes(totalPaginas: number): number[] {
     const paginasConImagenes: number[] = [];
-    
+
     // Estrategia: incluir páginas del medio hacia el final (donde suelen estar las imágenes)
     const inicioImagenes = Math.max(2, Math.floor(totalPaginas * 0.3));
     const finImagenes = totalPaginas;
-    
+
     for (let i = inicioImagenes; i <= finImagenes; i++) {
       paginasConImagenes.push(i);
     }
-    
+
     console.log(`📋 Páginas identificadas para extracción: ${paginasConImagenes.join(', ')}`);
     return paginasConImagenes;
   }
@@ -73,12 +73,12 @@ export class ExtractorImagenesPaginas {
 
     try {
       console.log(`🖼️ Renderizando página ${numeroPagina} como imagen médica...`);
-      
+
       // Renderizar con alta resolución para mejor calidad
       const viewport = pagina.getViewport({ scale: 2.5 });
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
-      
+
       if (!context) {
         console.warn('⚠️ No se pudo obtener contexto de canvas');
         return imagenes;
@@ -89,11 +89,11 @@ export class ExtractorImagenesPaginas {
 
       // Renderizar la página
       await pagina.render({ canvasContext: context, viewport: viewport }).promise;
-      
+
       // Verificar si la página contiene contenido médico visual
       if (this._esPaginaConContenidoMedico(canvas, numeroPagina)) {
         const dataUrl = canvas.toDataURL('image/png');
-        
+
         const imagen: ImagenMedica = {
           id: uuidv4(),
           nombre: `Imagen Médica - Página ${numeroPagina}`,
@@ -101,10 +101,10 @@ export class ExtractorImagenesPaginas {
           descripcion: `Imagen médica de la página ${numeroPagina} del informe PDF`,
           tipo: this._determinarTipoImagen(numeroPagina),
           pagina: numeroPagina,
-          ancho: canvas.width,
-          alto: canvas.height,
+          // ancho: canvas.width,
+          // alto: canvas.height,
         };
-        
+
         imagenes.push(imagen);
         console.log(`✅ Imagen médica creada: ${imagen.nombre} (${canvas.width}x${canvas.height})`);
       } else {
@@ -142,7 +142,7 @@ export class ExtractorImagenesPaginas {
 
       if (alpha > 0) {
         const luminancia = (r + g + b) / 3;
-        
+
         if (luminancia < 50) {
           contenidoNegro++;
         } else if (luminancia < 200) {

@@ -8,8 +8,7 @@ import {
   X,
   AlertCircle,
   CheckCircle,
-  SparklesIcon,
-  CloudArrowUpIcon
+  SparklesIcon
 } from 'lucide-react'
 import { ReporteVeterinario, OpcionesProcesamiento, RespuestaProcesamiento } from '@/lib/tipos/reporte-veterinario'
 import { backendAPI } from '@/lib/servicios/backend-api'

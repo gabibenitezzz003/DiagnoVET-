@@ -142,8 +142,8 @@ export function UltimosReportes() {
                         <h3 className="text-lg font-semibold text-gray-900">
                           {reporte.paciente?.nombre || 'Paciente sin nombre'}
                         </h3>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTipoEstudioColor(reporte.tipoEstudio)}`}>
-                          {reporte.tipoEstudio}
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTipoEstudioColor(reporte.informacionEstudio?.tipo || 'otro')}`}>
+                          {reporte.informacionEstudio?.tipo || 'otro'}
                         </span>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getEstadoColor(reporte.estado)}`}>
                           {reporte.estado}
@@ -155,16 +155,16 @@ export function UltimosReportes() {
                           <strong>Especie:</strong> {reporte.paciente?.especie || 'N/A'}
                         </span>
                         <span>
-                          <strong>Veterinario:</strong> {reporte.veterinario?.nombre || 'N/A'}
+                          <strong>Veterinario:</strong> {reporte.veterinarios?.[0]?.nombre || 'N/A'}
                         </span>
                         <span>
                           <strong>Fecha:</strong> {new Date(reporte.fechaCreacion).toLocaleDateString('es-ES')}
                         </span>
                       </div>
 
-                      {reporte.diagnostico?.principal && (
+                      {reporte.conclusion?.principales?.[0] && (
                         <p className="text-sm text-gray-700 mt-2">
-                          <strong>Diagnóstico:</strong> {reporte.diagnostico.principal}
+                          <strong>Diagnóstico:</strong> {reporte.conclusion.principales[0]}
                         </p>
                       )}
                     </div>

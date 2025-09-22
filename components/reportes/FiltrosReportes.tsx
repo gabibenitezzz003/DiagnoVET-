@@ -6,12 +6,14 @@ import { TIPOS_ESTUDIO, ESPECIES, ESTADOS_REPORTE } from '@/lib/constantes/confi
 
 interface FiltrosReportesProps {
   filtros: {
+    fechaInicio: string
+    fechaFin: string
     tipoEstudio: string
     especie: string
     veterinario: string
     estado: string
   }
-  onCambioFiltros: (filtros: typeof filtros) => void
+  onCambioFiltros: (filtros: { fechaInicio: string; fechaFin: string; tipoEstudio: string; especie: string; veterinario: string; estado: string }) => void
   onCerrar: () => void
 }
 
@@ -20,7 +22,14 @@ export function FiltrosReportes({
   onCambioFiltros,
   onCerrar
 }: FiltrosReportesProps) {
-  const [filtrosLocales, setFiltrosLocales] = useState(filtros)
+  const [filtrosLocales, setFiltrosLocales] = useState({
+    fechaInicio: filtros.fechaInicio || '',
+    fechaFin: filtros.fechaFin || '',
+    tipoEstudio: filtros.tipoEstudio || '',
+    especie: filtros.especie || '',
+    veterinario: filtros.veterinario || '',
+    estado: filtros.estado || ''
+  })
 
   const manejarCambio = (campo: keyof typeof filtros, valor: string) => {
     const nuevosFiltros = { ...filtrosLocales, [campo]: valor }
@@ -34,6 +43,8 @@ export function FiltrosReportes({
 
   const limpiarFiltros = () => {
     const filtrosLimpios = {
+      fechaInicio: '',
+      fechaFin: '',
       tipoEstudio: '',
       especie: '',
       veterinario: '',

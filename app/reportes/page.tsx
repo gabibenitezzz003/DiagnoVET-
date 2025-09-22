@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { 
-  ClipboardDocumentListIcon, 
+import {
+  ClipboardDocumentListIcon,
   MagnifyingGlassIcon,
   FunnelIcon,
   EyeIcon,
@@ -47,13 +47,13 @@ export default function ReportesPage() {
   }
 
   const reportesFiltrados = reportes.filter(reporte => {
-    const coincideBusqueda = busqueda === '' || 
+    const coincideBusqueda = busqueda === '' ||
       reporte.paciente?.nombre?.toLowerCase().includes(busqueda.toLowerCase()) ||
       reporte.veterinarios?.some(vet => vet.nombre?.toLowerCase().includes(busqueda.toLowerCase())) ||
       reporte.conclusion?.principales?.some(diag => diag.toLowerCase().includes(busqueda.toLowerCase()))
-    
+
     const coincideEstado = filtroEstado === 'todos' || reporte.estado === filtroEstado
-    
+
     return coincideBusqueda && coincideEstado
   })
 
@@ -153,7 +153,7 @@ export default function ReportesPage() {
                 No se encontraron reportes
               </h3>
               <p className="text-gray-600">
-                {busqueda || filtroEstado !== 'todos' 
+                {busqueda || filtroEstado !== 'todos'
                   ? 'Intenta ajustar los filtros de búsqueda'
                   : 'No hay reportes procesados aún'
                 }
@@ -170,20 +170,20 @@ export default function ReportesPage() {
                     <div className="w-12 h-12 bg-primario-100 rounded-lg flex items-center justify-center">
                       <ClipboardDocumentListIcon className="w-6 h-6 text-primario-600" />
                     </div>
-                    
+
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
                         <h3 className="text-lg font-semibold text-gray-900">
                           {reporte.paciente?.nombre || 'Paciente sin nombre'}
                         </h3>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTipoEstudioColor(reporte.tipoEstudio)}`}>
-                          {reporte.tipoEstudio}
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTipoEstudioColor(reporte.informacionEstudio?.tipo || 'otro')}`}>
+                          {reporte.informacionEstudio?.tipo || 'otro'}
                         </span>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getEstadoColor(reporte.estado)}`}>
                           {reporte.estado}
                         </span>
                       </div>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
                         <div>
                           <span className="font-medium">Especie:</span> {reporte.paciente?.especie || 'N/A'}
@@ -195,7 +195,7 @@ export default function ReportesPage() {
                           <span className="font-medium">Fecha:</span> {new Date(reporte.fechaCreacion).toLocaleDateString('es-ES')}
                         </div>
                       </div>
-                      
+
                       {reporte.conclusion?.principales?.[0] && (
                         <p className="text-sm text-gray-700 mt-2">
                           <span className="font-medium">Diagnóstico:</span> {reporte.conclusion.principales[0]}
@@ -203,9 +203,9 @@ export default function ReportesPage() {
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center space-x-3">
-                    <button 
+                    <button
                       onClick={() => abrirModal(reporte)}
                       className="inline-flex items-center px-4 py-2 bg-primario-600 text-white rounded-lg hover:bg-primario-700 transition-colors text-sm font-medium"
                     >

@@ -49,8 +49,8 @@ export default function ReportesPage() {
   const reportesFiltrados = reportes.filter(reporte => {
     const coincideBusqueda = busqueda === '' || 
       reporte.paciente?.nombre?.toLowerCase().includes(busqueda.toLowerCase()) ||
-      reporte.veterinario?.nombre?.toLowerCase().includes(busqueda.toLowerCase()) ||
-      reporte.diagnostico?.principal?.toLowerCase().includes(busqueda.toLowerCase())
+      reporte.veterinarios?.some(vet => vet.nombre?.toLowerCase().includes(busqueda.toLowerCase())) ||
+      reporte.conclusion?.principales?.some(diag => diag.toLowerCase().includes(busqueda.toLowerCase()))
     
     const coincideEstado = filtroEstado === 'todos' || reporte.estado === filtroEstado
     
@@ -189,16 +189,16 @@ export default function ReportesPage() {
                           <span className="font-medium">Especie:</span> {reporte.paciente?.especie || 'N/A'}
                         </div>
                         <div>
-                          <span className="font-medium">Veterinario:</span> {reporte.veterinario?.nombre || 'N/A'}
+                          <span className="font-medium">Veterinario:</span> {reporte.veterinarios?.[0]?.nombre || 'N/A'}
                         </div>
                         <div>
                           <span className="font-medium">Fecha:</span> {new Date(reporte.fechaCreacion).toLocaleDateString('es-ES')}
                         </div>
                       </div>
                       
-                      {reporte.diagnostico?.principal && (
+                      {reporte.conclusion?.principales?.[0] && (
                         <p className="text-sm text-gray-700 mt-2">
-                          <span className="font-medium">Diagnóstico:</span> {reporte.diagnostico.principal}
+                          <span className="font-medium">Diagnóstico:</span> {reporte.conclusion.principales[0]}
                         </p>
                       )}
                     </div>

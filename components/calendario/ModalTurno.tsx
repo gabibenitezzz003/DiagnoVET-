@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { 
+import {
   XMarkIcon,
   CalendarDaysIcon,
   UserIcon,
@@ -112,7 +112,7 @@ export default function ModalTurno({ turno, modoEdicion, onClose, onSave }: Moda
         paciente: formData.paciente_nombre,
         tipo_consulta: formData.tipo_consulta,
         veterinario: formData.veterinario_id,
-        notas_internas: formData.notas,
+        notas_internas: formData.notas_internas,
         precio: formData.precio
       }
 
@@ -137,30 +137,30 @@ export default function ModalTurno({ turno, modoEdicion, onClose, onSave }: Moda
         console.log('✏️ Actualizando turno en Supabase...')
         const datosActualizacion: ActualizarTurnoRequest = { ...formData }
         const respuesta = await servicioSupabase.actualizarTurno(turno.id, datosActualizacion)
-        
+
         if (!respuesta.exito) {
           throw new Error(respuesta.error || 'Error al actualizar turno en Supabase')
         }
-        
+
         console.log('✅ Turno actualizado exitosamente en Supabase')
       } else {
         console.log('➕ Creando turno en Supabase...')
         const respuesta = await servicioSupabase.crearTurno(formData)
-        
+
         if (!respuesta.exito) {
           throw new Error(respuesta.error || 'Error al crear turno en Supabase')
         }
-        
+
         console.log('✅ Turno creado exitosamente en Supabase')
       }
-      
+
       // Recargar turnos y cerrar modal
       onSave()
       onClose()
-      
+
       // Mostrar mensaje de éxito
       alert(modoEdicion ? 'Turno actualizado exitosamente' : 'Turno creado exitosamente')
-      
+
     } catch (error) {
       console.error('❌ Error al guardar turno:', error)
       alert(`Error: ${error.message || 'Error desconocido'}`)
@@ -212,7 +212,7 @@ export default function ModalTurno({ turno, modoEdicion, onClose, onSave }: Moda
               <HeartIcon className="w-5 h-5 text-pink-500" />
               <span>Información del Paciente</span>
             </h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -228,7 +228,7 @@ export default function ModalTurno({ turno, modoEdicion, onClose, onSave }: Moda
                   placeholder="Ej: Max, Luna, Rocky"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Especie *
@@ -249,7 +249,7 @@ export default function ModalTurno({ turno, modoEdicion, onClose, onSave }: Moda
                   <option value="otro">Otro</option>
                 </select>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Raza
@@ -272,7 +272,7 @@ export default function ModalTurno({ turno, modoEdicion, onClose, onSave }: Moda
               <UserIcon className="w-5 h-5 text-blue-500" />
               <span>Información del Tutor</span>
             </h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -288,7 +288,7 @@ export default function ModalTurno({ turno, modoEdicion, onClose, onSave }: Moda
                   placeholder="Nombre completo"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Email *
@@ -306,7 +306,7 @@ export default function ModalTurno({ turno, modoEdicion, onClose, onSave }: Moda
                   />
                 </div>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Teléfono *
@@ -333,7 +333,7 @@ export default function ModalTurno({ turno, modoEdicion, onClose, onSave }: Moda
               <ClockIcon className="w-5 h-5 text-green-500" />
               <span>Información de la Cita</span>
             </h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -354,7 +354,7 @@ export default function ModalTurno({ turno, modoEdicion, onClose, onSave }: Moda
                   ))}
                 </select>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Tipo de Consulta *
@@ -373,7 +373,7 @@ export default function ModalTurno({ turno, modoEdicion, onClose, onSave }: Moda
                   ))}
                 </select>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Fecha y Hora *
@@ -387,7 +387,7 @@ export default function ModalTurno({ turno, modoEdicion, onClose, onSave }: Moda
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Duración (minutos) *
@@ -407,7 +407,7 @@ export default function ModalTurno({ turno, modoEdicion, onClose, onSave }: Moda
                   <option value={120}>2 horas</option>
                 </select>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Precio (opcional)
@@ -427,7 +427,7 @@ export default function ModalTurno({ turno, modoEdicion, onClose, onSave }: Moda
                 </div>
               </div>
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Notas (opcional)
@@ -435,8 +435,8 @@ export default function ModalTurno({ turno, modoEdicion, onClose, onSave }: Moda
               <div className="relative">
                 <DocumentTextIcon className="w-5 h-5 absolute left-3 top-3 text-gray-400" />
                 <textarea
-                  name="notas"
-                  value={formData.notas}
+                  name="notas_internas"
+                  value={formData.notas_internas}
                   onChange={handleChange}
                   rows={3}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"

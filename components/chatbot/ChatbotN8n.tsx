@@ -66,6 +66,7 @@ export default function ChatbotN8n({
             footer: 'DiagnoVET - Asistente Médico Inteligente',
             getStarted: 'Nueva Conversación',
             inputPlaceholder: 'Escribe tu pregunta veterinaria...',
+            closeButtonTooltip: 'Cerrar chat',
           },
         },
         enableStreaming: enableStreaming,
@@ -81,8 +82,8 @@ export default function ChatbotN8n({
 
   return (
     <div className="w-full h-full">
-      <div 
-        id="n8n-chat" 
+      <div
+        id="n8n-chat"
         ref={chatRef}
         className="w-full h-full"
         style={{

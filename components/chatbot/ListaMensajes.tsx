@@ -59,7 +59,7 @@ export function ListaMensajes({ mensajes }: ListaMensajesProps) {
                     : 'text-gray-500'
                 }`}
               >
-                {formatearTiempo(mensaje.timestamp)}
+                {formatearTiempo(new Date(mensaje.timestamp))}
               </div>
             </div>
           </div>

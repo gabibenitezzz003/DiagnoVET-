@@ -54,7 +54,7 @@ export default function ChatbotN8n({
           version: '1.0.0'
         },
         showWelcomeScreen: showWelcomeScreen,
-        defaultLanguage: 'es',
+        defaultLanguage: 'en',
         initialMessages: [
           '¡Hola! 👋',
           'Soy el asistente médico de DiagnoVET. ¿En qué puedo ayudarte hoy?'

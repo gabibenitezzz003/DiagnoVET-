@@ -147,3 +147,11 @@ export interface RespuestaProcesamiento {
   }
   error?: string
 }
+
+export interface MensajeChatbot {
+  readonly id: string
+  readonly contenido: string
+  readonly tipo: 'usuario' | 'asistente'
+  readonly timestamp: string
+  readonly session_id: string
+}

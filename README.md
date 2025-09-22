@@ -182,10 +182,3 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 - GitHub: [@gabibenitezzz003](https://github.com/gabibenitezzz003)
 - Proyecto: [DiagnoVET](https://github.com/gabibenitezzz003/DiagnoVET-)
-
-## 🙏 Agradecimientos
-
-- Google Gemini AI por el procesamiento de documentos
-- Supabase por la infraestructura de base de datos
-- Next.js y FastAPI por los frameworks utilizados
-- La comunidad de código abierto

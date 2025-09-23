@@ -1,184 +1,216 @@
-# DiagnoVET - Sistema de Reportes Veterinarios
+<div align="center">
 
-Sistema completo de gestión de reportes veterinarios con procesamiento de PDFs usando inteligencia artificial, integración con Google Drive y Supabase.
+<img src="https://www.freepik.es/icono/bing_732186" alt="DiagnoVET Logo" width="120"/>
 
-## 🚀 Características Principales
+# 🐾 DiagnoVET  
+### Sistema de Diagnóstico Veterinario Asistido por IA
 
-- **Procesamiento de PDFs con IA**: Extracción y análisis de informes veterinarios usando Google Gemini
-- **Generación de Reportes Estructurados**: Creación automática de reportes en formato Markdown
-- **Integración con Google Drive**: Almacenamiento automático de PDFs originales
-- **Base de Datos Supabase**: Persistencia de datos y reportes
-- **Visor de Imágenes Médicas**: Visualización profesional de imágenes extraídas de PDFs
-- **Frontend Moderno**: Interfaz desarrollada con Next.js y React
-- **Backend Robusto**: API REST desarrollada con FastAPI y Python
-- **Integración n8n**: Automatización de flujos de trabajo
+> Una plataforma web full-stack para **digitalizar, analizar y gestionar** informes clínicos veterinarios, con asistencia inteligente en tiempo real.
 
-## 🛠️ Tecnologías Utilizadas
+<p align="center">
+  <img src="https://img.shields.io/badge/Estado-En%20Desarrollo-blue" alt="Estado del Proyecto"/>
+  <img src="https://img.shields.io/badge/Frontend-Next.js-black?logo=next.js" alt="Next.js"/>
+  <img src="https://img.shields.io/badge/Backend-FastAPI-green?logo=fastapi" alt="FastAPI"/>
+  <img src="https://img.shields.io/badge/IA-Google%20Gemini-blue?logo=google" alt="Google Gemini"/>
+  <img src="https://img.shields.io/badge/Base%20de%20Datos-Supabase-3ECF8E?logo=supabase" alt="Supabase"/>
+  <img src="https://img.shields.io/badge/Licencia-MIT-green" alt="Licencia MIT"/>
+</p>
 
-### Frontend
-- **Next.js 14** - Framework de React
-- **TypeScript** - Tipado estático
-- **Tailwind CSS** - Estilos y diseño
-- **React Markdown** - Visualización de reportes
+</div>
 
-### Backend
-- **FastAPI** - Framework web de Python
-- **Python 3.13** - Lenguaje de programación
-- **Google Gemini AI** - Procesamiento de PDFs
-- **Google Drive API** - Almacenamiento de archivos
-- **Supabase** - Base de datos y autenticación
-- **OpenCV** - Procesamiento de imágenes médicas
-- **PyMuPDF** - Extracción de contenido de PDFs
+---
 
-### Infraestructura
-- **Docker** - Containerización
-- **Nginx** - Proxy reverso
-- **GitHub Actions** - CI/CD
-- **Vercel** - Despliegue frontend
+## 📖 Tabla de Contenidos
+1. [Acerca del Proyecto](#-acerca-del-proyecto)
+2. [✨ Características Clave](#-características-clave)
+3. [🏗️ Arquitectura del Sistema](#️-arquitectura-del-sistema)
+4. [📂 Estructura del Repositorio](#-estructura-del-repositorio)
+5. [🛠️ Stack Tecnológico](#️-stack-tecnológico)
+6. [⚙️ Instalación Local](#️-instalación-local)
+7. [🔑 Variables de Entorno](#-variables-de-entorno)
+8. [🔌 API Endpoints](#-api-endpoints)
+9. [📅 Sistema de Calendarios](#-sistema-de-calendarios)
+10. [☁️ Despliegue a Producción](#️-despliegue-a-producción)
+11. [🤝 Contribuciones](#-contribuciones)
+12. [📄 Licencia](#-licencia)
 
-## 📁 Estructura del Proyecto
+---
 
-```
+## 🚀 Acerca del Proyecto
+
+**DiagnoVET** es una solución integral para clínicas veterinarias que:  
+- Automatiza la lectura y procesamiento de **informes PDF** médicos.  
+- Convierte datos desestructurados en **información útil y consultable**.  
+- Ofrece un **chatbot clínico inteligente (Dr. VetAI)** que responde preguntas con fuentes citadas.  
+- Incluye un **sistema de turnos** conectado a Google Calendar y notificaciones automáticas.  
+
+### 💡 Problema que resuelve
+Los veterinarios pierden tiempo en tareas repetitivas como:  
+- Leer informes médicos.  
+- Transcribir resultados de laboratorio.  
+- Agendar y confirmar turnos.  
+
+Con **DiagnoVET**, estas tareas se **automatizan y centralizan**, liberando tiempo para lo más importante: **el cuidado de los pacientes**.
+
+---
+
+## ✨ Características Clave
+
+- 📑 **Análisis Inteligente de PDFs** → Extrae información de radiografías, ecografías y análisis de sangre.  
+- 🤖 **Chatbot Clínico (Dr. VetAI)** → Responde consultas clínicas basadas en RAG.  
+- 📊 **Dashboard Centralizado** → Métricas en tiempo real e informes recientes.  
+- 📅 **Gestión de Turnos** → Integración con Google Calendar y confirmación por email.  
+- 🔄 **Automatización Total** → Ingesta automática desde Google Drive y sincronización con Supabase.  
+
+---
+
+## 🏗️ Arquitectura del Sistema
+
+```plaintext
+┌───────────────────────┐
+│ Veterinario / Usuario │
+└───────────┬───────────┘
+            │
+┌───────────▼───────────┐
+│  Frontend (Next.js)   │
+│ Despliegue: Vercel    │
+└───────────┬───────────┘
+            │ (API REST)
+┌───────────▼───────────┐
+│  Backend (FastAPI)    │
+│ Despliegue: Render    │
+└─────┬───────────┬─────┘
+      │           │
+      │           │───► n8n (Workflows: Turnos, Emails)
+      │
+┌─────▼─────┐   ┌──────────────┐
+│ Supabase  │   │ Google Drive │
+│ (DB/Auth) │   └──────────────┘
+└───────────┘
+📂 Estructura del Repositorio
+plaintext
+Copiar código
 DiagnoVET/
 ├── app/                    # Frontend Next.js
-│   ├── api/               # API routes
-│   ├── dashboard/         # Panel de control
-│   ├── documentos/        # Subida de documentos
-│   ├── reportes/          # Visualización de reportes
-│   └── chatbot/           # Chatbot integrado
-├── backend/               # Backend FastAPI
-│   ├── controladores/     # Controladores de API
-│   ├── modelos/           # Modelos de datos
-│   ├── servicios/         # Servicios de negocio
-│   └── utilidades/        # Utilidades comunes
-├── components/            # Componentes React reutilizables
-├── lib/                   # Librerías y utilidades
-├── n8n/                   # Flujos de automatización
-└── supabase/              # Esquemas de base de datos
-```
+│   ├── api/                # API routes
+│   ├── dashboard/          # Panel de control
+│   ├── documentos/         # Subida de documentos
+│   ├── reportes/           # Visualización de reportes
+│   └── chatbot/            # Chatbot integrado
+├── backend/                # Backend FastAPI
+│   ├── controladores/      # Controladores de API
+│   ├── modelos/            # Modelos de datos
+│   ├── servicios/          # Lógica de negocio
+│   └── utilidades/         # Helpers
+├── components/             # Componentes UI reutilizables
+├── lib/                    # Librerías compartidas
+├── n8n/                    # Workflows automatizados
+└── supabase/               # Migraciones y esquemas DB
+🛠️ Stack Tecnológico
+Capa	Tecnologías
+Frontend	Next.js, TypeScript, Tailwind CSS
+Backend	Python, FastAPI, Docker
+Base de Datos	Supabase (PostgreSQL)
+IA & NLP	Google Gemini, LangChain
+Automatización	n8n, Google Calendar API, SMTP
+Infraestructura	Vercel, Render, GitHub Actions, Docker, Nginx
 
-## 🚀 Instalación y Configuración
+⚙️ Instalación Local
+🔧 Prerrequisitos
+Node.js 18+
 
-### Prerrequisitos
-- Node.js 18+
-- Python 3.13+
-- Git
+Python 3.10+
 
-### 1. Clonar el repositorio
-```bash
+Docker + Docker Compose
+
+Git
+
+🖥️ Pasos
+bash
+Copiar código
+# 1. Clonar el repositorio
 git clone https://github.com/gabibenitezzz003/DiagnoVET-.git
 cd DiagnoVET-
-```
 
-### 2. Configurar variables de entorno
-Crear archivo `.env.local` con las siguientes variables:
+# 2. Levantar DB en Docker
+docker-compose up -d postgres
 
-```env
-# Supabase
-SUPABASE_URL=tu_supabase_url
-SUPABASE_ANON_KEY=tu_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=tu_supabase_service_key
-
-# Google Gemini
-NEXT_PUBLIC_GEMINI_API_KEY=tu_gemini_api_key
-
-# Google Drive
-GOOGLE_DRIVE_CLIENT_ID=tu_google_drive_client_id
-GOOGLE_DRIVE_CLIENT_SECRET=tu_google_drive_client_secret
-GOOGLE_DRIVE_REFRESH_TOKEN=tu_google_drive_refresh_token
-GOOGLE_DRIVE_FOLDER_ID=tu_google_drive_folder_id
-
-# N8N Webhooks
-NEXT_PUBLIC_N8N_WEBHOOK_URL=tu_n8n_webhook_url
-NEXT_PUBLIC_N8N_CALENDARIO_WEBHOOK_URL=tu_n8n_calendario_webhook_url
-```
-
-### 3. Instalar dependencias del frontend
-```bash
-npm install
-```
-
-### 4. Instalar dependencias del backend
-```bash
+# 3. Backend
 cd backend
+python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-```
+uvicorn main:app --reload
 
-### 5. Ejecutar el proyecto
-
-#### Frontend (puerto 3000)
-```bash
+# 4. Frontend
+cd app
+npm install
 npm run dev
-```
+🔑 Variables de Entorno
+Variable	Servicio	Descripción
+SUPABASE_URL	Backend	URL pública de Supabase
+SUPABASE_ANON_KEY	Frontend	Clave pública para cliente
+SUPABASE_SERVICE_KEY	Backend	Clave de servicio (admin)
+GEMINI_API_KEY	Backend	API Key de Google Gemini
+DATABASE_URL	Backend	Conexión PostgreSQL
+SMTP_USER	Backend	Usuario SMTP
+SMTP_PASS	Backend	Contraseña SMTP
+N8N_WEBHOOK_TURNOS	Backend	Webhook n8n para turnos
 
-#### Backend (puerto 8000)
-```bash
-cd backend
-python -m uvicorn main:app --reload --port 8000
-```
+🔌 API Endpoints
+POST /api/reportes/analizar → Procesa PDF con Gemini
 
-## 📖 Uso del Sistema
+GET /api/reportes → Lista reportes
 
-### 1. Subir Documento PDF
-- Navegar a la sección "Documentos"
-- Seleccionar un archivo PDF veterinario
-- Configurar opciones de procesamiento
-- Hacer clic en "Procesar Documento"
+GET /api/reportes/{id} → Reporte específico
 
-### 2. Ver Reportes Generados
-- Ir a la sección "Reportes"
-- Visualizar reportes procesados
-- Usar el visor de imágenes médicas
-- Exportar o compartir reportes
+POST /api/archivos/subir → Sube archivo PDF
 
-### 3. Dashboard
-- Ver estadísticas en tiempo real
-- Acceder a reportes recientes
-- Gestionar el sistema
+GET /api/archivos → Lista archivos
 
-## 🔧 API Endpoints
+POST /api/chatbot/mensaje → Chat con Dr. VetAI
 
-### Reportes
-- `POST /api/reportes/procesar` - Procesar PDF
-- `GET /api/reportes` - Listar reportes
-- `GET /api/reportes/{id}` - Obtener reporte específico
+POST /api/calendario/turno → Crear turno
 
-### Archivos
-- `POST /api/archivos/subir` - Subir archivo
-- `GET /api/archivos` - Listar archivos
+PATCH /api/calendario/turno/{id} → Modificar turno
 
-### Chatbot
-- `POST /api/chatbot/mensaje` - Enviar mensaje al chatbot
+DELETE /api/calendario/turno/{id} → Cancelar turno
 
-## 🐳 Despliegue con Docker
+📅 Sistema de Calendarios
+DiagnoVET integra Google Calendar + n8n + Supabase para gestionar turnos en tiempo real:
 
-### Construir imágenes
-```bash
-docker-compose -f docker-compose.production.yml build
-```
+plaintext
+Copiar código
+Webhook Turnos (n8n)
+   │
+   ├── Crear Evento → Google Calendar → Email de Confirmación
+   ├── Modificar Evento → Google Calendar → Email de Actualización
+   └── Cancelar Evento → Google Calendar → Email de Cancelación
+          ↓
+        Supabase (Registro de estado)
+✅ Notificaciones automáticas a tutores con botones de Confirmar / Cancelar
+✅ Sincronización inmediata con la base de datos
+✅ Evita la sobrecarga manual de agenda
 
-### Ejecutar en producción
-```bash
-docker-compose -f docker-compose.production.yml up -d
-```
+☁️ Despliegue a Producción
+Base de Datos → Supabase / Neon
 
-## 🤝 Contribución
+Backend → Render (Docker)
 
-1. Fork el proyecto
-2. Crear una rama para tu feature (`git checkout -b feature/algo`)
-3. Commit tus cambios (`git commit -m 'Add algo'`)
-4. Push a la rama (`git push origin feature/algo`)
-5. Abrir un Pull Request
+Frontend → Vercel
 
-## 📝 Licencia
+Workflows → n8n Cloud
 
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+CI/CD → GitHub Actions
 
-## 👥 Equipo
+🤝 Contribuciones
+Contribuciones abiertas 🚀
 
-- **Gabriel Benitez** - Desarrollador Principal
+Fork del repo
 
-## 📞 Contacto
+Crear rama feature/nueva-funcionalidad
 
-- GitHub: [@gabibenitezzz003](https://github.com/gabibenitezzz003)
-- Proyecto: [DiagnoVET](https://github.com/gabibenitezzz003/DiagnoVET-)
+Push + Pull Request
+
+📄 Licencia
+Distribuido bajo licencia MIT.

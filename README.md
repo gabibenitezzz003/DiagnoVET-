@@ -165,9 +165,9 @@ docker-compose -f docker-compose.production.yml up -d
 ## 🤝 Contribución
 
 1. Fork el proyecto
-2. Crear una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
+2. Crear una rama para tu feature (`git checkout -b feature/algo`)
+3. Commit tus cambios (`git commit -m 'Add algo'`)
+4. Push a la rama (`git push origin feature/algo`)
 5. Abrir un Pull Request
 
 ## 📝 Licencia

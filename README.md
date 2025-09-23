@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://www.freepik.es/icono/bing_732186" alt="DiagnoVET Logo" width="120"/>
+<img src="—Pngtree—pet lovers logo inspirations_5330530.png" alt="DiagnoVET Logo" width="120"/>
 
 # 🐾 DiagnoVET  
 ### Sistema de Diagnóstico Veterinario Asistido por IA

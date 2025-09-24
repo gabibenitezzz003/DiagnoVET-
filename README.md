@@ -1,7 +1,3 @@
-<div align="center">
-
-<img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=120&h=120&fit=crop&crop=center" width="120"/>
-
 # 🐾 DiagnoVET  
 ### Sistema de Diagnóstico Veterinario Asistido por IA
 
